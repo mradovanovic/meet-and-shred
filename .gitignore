@@ -1,0 +1,13 @@
+# Archives lourdes (>100 Mo bloquées par GitHub) — gardées en local uniquement.
+# Les versions décompressées des assets V1 restent versionnées.
+*.zip
+
+# Fichiers temporaires Office (verrous ~$...)
+~$*
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+
+# Permissions locales Claude Code (par poste, ne pas versionner)
+.claude/settings.local.json
