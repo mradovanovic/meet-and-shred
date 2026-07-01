@@ -36,6 +36,7 @@ cd meet-and-shred
 | `CLAUDE.md` (racine) | Vision produit, stack, invariants d'archi, rôles. **Lecture obligatoire.** |
 | `openspec/config.yaml` | Le « chapeau » : contexte projet injecté automatiquement par OpenSpec dans chaque artefact. C'est ce que ton Claude reçoit en contexte. |
 | `openspec/changes/<nom>/design.md` | Source de vérité des décisions d'archi, **par change**. |
+| `openspec/FORMAT-SPECS.md` | Le contrat de format des specs. **À lire surtout si tu travailles sans le CLI** (pas de `openspec validate` pour te rattraper). |
 
 Pour voir l'état d'avancement à tout moment :
 
