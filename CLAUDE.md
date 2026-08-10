@@ -93,8 +93,9 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 | `events-core` | Specs complètes | Events, swipe, feed filtré par discipline et distance |
 | `map-core` | Specs complètes | Carte Google Maps principale, marqueurs, filtres |
 | `i18n-core` | Specs complètes | FR/EN/ES, préférence utilisateur, middleware langue |
-| `notifications-push` | Proposal seulement | FCM + APNs, tokens push, 4 types de notifications |
+| `notifications-push` | Specs complètes | FCM + APNs, tokens push, 4 types de notifications, suivi spot/rider |
 | `backoffice-spot` | Non démarré | Interface gestionnaire de spot |
+| `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte |
 
 ---
 
