@@ -13,8 +13,8 @@ Le système SHALL présenter un écran d'onboarding profil après la première i
 
 ---
 
-### Requirement: Sélection des disciplines
-Le système SHALL permettre au rider de sélectionner une ou plusieurs disciplines parmi une liste dynamique groupée par catégorie (Moto, Vélo, Eau, Snow, Urban). La liste SHALL être extensible sans modification de code.
+### Requirement: Sélection des disciplines, limitée à 5
+Le système SHALL permettre au rider de sélectionner entre une et cinq disciplines parmi une liste dynamique groupée par catégorie (Moto, Vélo, Eau, Snow, Urban). La liste des disciplines disponibles SHALL être extensible sans modification de code ; la limite de 5 disciplines par rider s'applique quel que soit le nombre de disciplines existantes.
 
 #### Scenario: Sélection multi-discipline
 - **WHEN** le rider sélectionne MX et Enduro
@@ -23,6 +23,19 @@ Le système SHALL permettre au rider de sélectionner une ou plusieurs disciplin
 #### Scenario: Ajout d'une nouvelle discipline en base
 - **WHEN** un admin ajoute une discipline "Kite" en base
 - **THEN** elle apparaît automatiquement dans la liste de sélection sans mise à jour de l'app
+
+#### Scenario: Tentative de sélection d'une 6e discipline
+- **WHEN** un rider a déjà 5 disciplines sélectionnées et tente d'en cocher une 6e
+- **THEN** le système refuse la sélection et invite à en retirer une avant d'en ajouter une nouvelle
+
+---
+
+### Requirement: Mise à jour des disciplines pratiquées
+Le système SHALL permettre au rider de modifier ses disciplines à tout moment (ajout, retrait), dans la limite de 5. Le contenu affiché au rider (carte, feed d'events) SHALL immédiatement refléter ses nouvelles disciplines.
+
+#### Scenario: Remplacement d'une discipline
+- **WHEN** un rider retire "Ski" et ajoute "Kite" à ses disciplines
+- **THEN** son profil est mis à jour, et les spots/events Ski ne sont plus mis en avant par défaut sur sa carte et son feed, remplacés par ceux de Kite (voir map-core, events-core)
 
 ---
 

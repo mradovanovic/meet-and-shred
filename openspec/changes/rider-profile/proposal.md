@@ -6,7 +6,7 @@ Après l'inscription, le rider doit construire son identité sur MeetNShred. Un 
 
 - Écran de complétion de profil post-inscription (onboarding profil)
 - Upload de photos de profil (jusqu'à 5), affichage avec parallax
-- Sélection des disciplines pratiquées (liste ouverte, multi-sélection)
+- Sélection des disciplines pratiquées (liste ouverte, multi-sélection, plafonnée à 5), modifiable à tout moment
 - Niveau de riding
 - Fiches matériel par discipline : champs structurés et terminologie adaptée à chaque sport (machine pour un motard, board pour un snowboarder, etc.)
 - Plusieurs setups possibles par discipline (ex : 2 motos MX)
@@ -31,3 +31,4 @@ Après l'inscription, le rider doit construire son identité sur MeetNShred. Un 
 - Stockage des photos sur un service cloud (S3/R2)
 - API CRUD profil + equipment
 - Liste ouverte des disciplines en base avec schéma de champs matériel par discipline
+- Le plafond de 5 disciplines par rider conditionne le contenu pré-filtré vu sur la carte et le feed d'events (voir map-core, events-core) — pas de changement requis dans ces changes, ils consomment déjà "les disciplines du rider" quel que soit leur nombre
