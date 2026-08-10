@@ -6,7 +6,8 @@
 - [ ] 1.4 Créer la table `brands` (id, name, logo_url) — liste ouverte
 - [ ] 1.5 Créer la table `shop_brands` (shop_id, brand_id) — liaison N:N
 - [ ] 1.6 Créer la table `shop_opening_hours` (id, shop_id, day_of_week, opens_at, closes_at)
-- [ ] 1.7 Index géospatial sur `shops.(lat, lng)`
+- [ ] 1.7 Créer la table `shop_closures` (id, shop_id, start_date, end_date, reason)
+- [ ] 1.8 Index géospatial sur `shops.(lat, lng)`
 
 ## 2. API magasins — Publique
 
@@ -21,6 +22,7 @@
 - [ ] 3.3 `POST /shops/:id/photos` — upload photos
 - [ ] 3.4 `DELETE /shops/:id/photos/:photoId` — suppression photo
 - [ ] 3.5 `PUT /shops/:id/opening-hours` — édition des horaires d'ouverture
+- [ ] 3.6 `POST /shops/:id/closures` / `DELETE /shops/:id/closures/:closureId` — déclarer/annuler une fermeture exceptionnelle
 
 ## 4. API marques
 
@@ -45,6 +47,6 @@
 ## 8. Mobile
 
 - [ ] 8.1 Fiche magasin publique (horaires, marques, disciplines, photos, statut ouvert/fermé, bouton "Créer un event")
-- [ ] 8.2 Écran gestionnaire : édition fiche, horaires, marques, photos
+- [ ] 8.2 Écran gestionnaire : édition fiche, horaires, marques, photos, fermeture exceptionnelle
 - [ ] 8.3 Écran de soumission d'une nouvelle fiche magasin (commerçant)
 - [ ] 8.4 Écran super admin : validation des fiches en attente, transfert de gestion

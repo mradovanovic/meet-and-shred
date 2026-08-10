@@ -42,6 +42,9 @@ MeetNShred couvre déjà les lieux de ride (spots) et les rassemblements (events
 **Affichage carte**
 → Le magasin apparaît sur la carte principale comme un nouveau type de marqueur, visuellement distinct des spots et des events, filtrable indépendamment (voir map-core).
 
+**Fermeture exceptionnelle**
+→ En plus des horaires réguliers, le gestionnaire peut déclarer une période de fermeture exceptionnelle (vacances, rupture de stock, travaux...) via une plage de dates avec un motif optionnel. Tant qu'une fermeture exceptionnelle est active, le statut affiché est "Fermé exceptionnellement" et prime sur les horaires réguliers, même sur un créneau normalement ouvert.
+
 ## Risks / Trade-offs
 
 - [Confusion spot vs magasin] Un rider pourrait confondre un magasin avec un lieu rideable → icône de marqueur clairement différente sur la carte, libellé explicite sur la fiche
@@ -50,6 +53,5 @@ MeetNShred couvre déjà les lieux de ride (spots) et les rassemblements (events
 
 ## Open Questions
 
-- Faut-il un statut "temporairement fermé" (vacances, rupture de stock) en plus des horaires réguliers récurrents ?
 - Le nom définitif du rôle `spot_manager` reste TBD (voir spot-core) — s'il est renommé, il faudra le répercuter ici puisqu'il est réutilisé pour les magasins.
 - Comment le futur modèle de sponsoring/partenariat (hors scope ici) viendra-t-il s'articuler avec la fiche magasin ? À traiter dans un change dédié le moment venu.

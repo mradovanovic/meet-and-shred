@@ -48,6 +48,19 @@ Le système SHALL permettre au gestionnaire de définir des horaires d'ouverture
 
 ---
 
+### Requirement: Fermeture exceptionnelle temporaire
+Le système SHALL permettre au gestionnaire de déclarer une période de fermeture exceptionnelle (vacances, rupture de stock, travaux...) avec une date de début, une date de fin et un motif optionnel. Tant qu'une fermeture exceptionnelle est active, le statut affiché SHALL être "Fermé exceptionnellement", même sur un créneau habituellement ouvert.
+
+#### Scenario: Fermeture pour congés
+- **WHEN** un gestionnaire déclare une fermeture exceptionnelle du 1er au 15 août
+- **THEN** la fiche du magasin affiche "Fermé exceptionnellement" pendant toute cette période, même sur les créneaux habituellement ouverts
+
+#### Scenario: Fin de la fermeture exceptionnelle
+- **WHEN** la date de fin d'une fermeture exceptionnelle est dépassée
+- **THEN** le statut du magasin repasse automatiquement au calcul normal basé sur les horaires réguliers
+
+---
+
 ### Requirement: Affichage des magasins sur la carte principale
 Le système SHALL afficher les magasins validés sur la carte principale avec un marqueur visuellement distinct de celui des spots et des events. Les magasins SHALL être filtrables indépendamment des spots et des events.
 
