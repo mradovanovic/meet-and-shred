@@ -2,11 +2,14 @@
 
 MeetNShred couvre déjà les lieux de ride (spots) et les rassemblements (events). Les riders ont aussi besoin des commerces liés à leur pratique : magasin de vélo, de moto, de kite, etc. Un magasin n'est pas un lieu de ride — pas de statut "rideable" — mais il partage beaucoup avec un spot : une fiche publique, une position sur la carte, des photos, un gestionnaire. Ce qui compte pour un magasin, ce ne sont pas les conditions de ride mais les horaires d'ouverture et les marques vendues.
 
+Le "magasin" au sens de MeetNShred dépasse le commerce d'équipement sportif : bars et restaurants font partie de l'écosystème ride (lieux de rendez-vous après-session, sponsors locaux potentiels) même s'ils ne vendent ni équipement ni marque liée à une discipline. D'où l'introduction d'un type de commerce, séparé des disciplines.
+
 ## Goals / Non-Goals
 
 **Goals:**
 - Fiche magasin à part entière (pas une variante de la fiche spot)
-- Un magasin peut couvrir plusieurs disciplines (comme les spots)
+- Type de commerce extensible (magasin de sport, bar, restaurant...), séparé des disciplines — un magasin de sport a des disciplines et des marques, un bar ou un restaurant n'en a pas forcément
+- Un magasin peut couvrir plusieurs disciplines (comme les spots), de façon facultative
 - Marques vendues en liste ouverte et extensible — jamais hardcodée
 - Horaires d'ouverture par jour, statut ouvert/fermé calculé automatiquement
 - Affichage sur la carte principale, comme les spots et events, avec un marqueur distinct
@@ -25,6 +28,9 @@ MeetNShred couvre déjà les lieux de ride (spots) et les rassemblements (events
 **Fiche à part entière, pas une variante de spot**
 → Table `shops` distincte de `spots`. Mêmes briques (page publique, photos, position GPS, multi-disciplines) mais la donnée "temps réel" d'un magasin, c'est ouvert/fermé selon les horaires — pas un statut configurable par discipline comme pour les spots.
 
+**Type de commerce, séparé des disciplines**
+→ Table `shop_types` en liste ouverte, même principe que `disciplines` : jamais un enum, ajouter un type = insérer une ligne. Slug + label `{ fr, en, es }`. `shops.shop_type_id` (obligatoire, un seul type par fiche). Types de base au lancement : `magasin_sport`, `bar`, `restaurant`. Les disciplines et les marques restent des associations facultatives, indépendantes du type — un bar peut très bien se rattacher à une discipline (lieu de rendez-vous habituel d'une communauté) sans que ce soit obligatoire ni même attendu.
+
 **Marques vendues**
 → Table `brands` en liste ouverte, même principe que `disciplines` : jamais un enum, ajouter une marque = insérer une ligne. Liaison N:N via `shop_brands`. Une marque peut avoir un nom et un logo.
 
@@ -40,7 +46,7 @@ MeetNShred couvre déjà les lieux de ride (spots) et les rassemblements (events
 2. Un utilisateur avec le rôle `spot_manager` soumet lui-même sa fiche magasin, validée manuellement par le super admin avant publication (même logique que la soumission de spot)
 
 **Affichage carte**
-→ Le magasin apparaît sur la carte principale comme un nouveau type de marqueur, visuellement distinct des spots et des events, filtrable indépendamment (voir map-core).
+→ Le magasin apparaît sur la carte principale comme un nouveau type de marqueur, visuellement distinct des spots et des events, filtrable indépendamment (voir map-core). Contrairement aux events (fenêtrés dans le temps), un magasin est toujours affiché : c'est sa couleur (ouvert/fermé) qui varie, pas sa présence sur la carte. L'icône du marqueur reflète le type de commerce (magasin de sport, bar, restaurant...).
 
 **Fermeture exceptionnelle**
 → En plus des horaires réguliers, le gestionnaire peut déclarer une période de fermeture exceptionnelle (vacances, rupture de stock, travaux...) via une plage de dates avec un motif optionnel. Tant qu'une fermeture exceptionnelle est active, le statut affiché est "Fermé exceptionnellement" et prime sur les horaires réguliers, même sur un créneau normalement ouvert.

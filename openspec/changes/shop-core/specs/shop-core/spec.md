@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Fiche publique d'un magasin
-Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, description, photos, adresse/coordonnées GPS, discipline(s) couvertes, marques vendues, horaires d'ouverture, statut ouvert/fermé calculé en temps réel.
+Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, type de commerce, description, photos, adresse/coordonnées GPS, discipline(s) couvertes (si applicable), marques vendues (si applicable), horaires d'ouverture, statut ouvert/fermé calculé en temps réel.
 
 #### Scenario: Consultation d'une fiche magasin
 - **WHEN** un rider consulte la fiche d'un magasin validé
@@ -9,17 +9,38 @@ Le système SHALL exposer une fiche publique pour chaque magasin validé, conten
 
 ---
 
+### Requirement: Type de commerce extensible
+Le système SHALL exiger un type de commerce pour chaque magasin (ex : magasin de sport, bar, restaurant), chargé depuis une liste extensible et jamais depuis un enum figé dans le code. Chaque type SHALL avoir un slug et un label multilingue `{ fr, en, es }`. Le super admin SHALL pouvoir ajouter un nouveau type sans modification de code.
+
+#### Scenario: Types de base disponibles
+- **WHEN** un commerçant crée sa fiche magasin
+- **THEN** il choisit un type parmi la liste existante (magasin de sport, bar, restaurant, ou tout autre type ajouté depuis)
+
+#### Scenario: Ajout d'un nouveau type par le super admin
+- **WHEN** le super admin ajoute un type "atelier de réparation" à la liste
+- **THEN** ce type est immédiatement disponible à la création ou l'édition d'une fiche magasin, sans déploiement
+
+---
+
 ### Requirement: Magasin multi-disciplines
-Le système SHALL permettre d'associer un magasin à une ou plusieurs disciplines.
+Le système SHALL permettre d'associer un magasin à une ou plusieurs disciplines. Cette association SHALL être facultative : un magasin dont le type de commerce n'est pas lié à une pratique sportive (ex : bar, restaurant) peut n'avoir aucune discipline associée.
 
 #### Scenario: Magasin de sports multiples
 - **WHEN** un gestionnaire associe son magasin aux disciplines Vélo, Ski et Skateboard
 - **THEN** les trois disciplines apparaissent sur la fiche du magasin et il est trouvable dans les filtres de chacune
 
+#### Scenario: Bar sans discipline
+- **WHEN** un gestionnaire crée une fiche pour un bar sans lui associer de discipline
+- **THEN** la fiche est valide et publiable, la section disciplines n'apparaît simplement pas sur la fiche
+
+#### Scenario: Bar fréquenté par une communauté ride
+- **WHEN** le gestionnaire d'un bar souhaite tout de même l'associer à la discipline MX (lieu de rendez-vous habituel des motards du coin)
+- **THEN** le système l'autorise, l'association discipline restant facultative et non contrainte par le type de commerce
+
 ---
 
 ### Requirement: Marques vendues en liste ouverte
-Le système SHALL permettre d'associer un magasin à une ou plusieurs marques. La liste des marques disponibles SHALL être extensible sans modification de code : ajouter une marque revient à insérer une ligne, jamais à modifier une liste figée dans le code.
+Le système SHALL permettre d'associer un magasin à une ou plusieurs marques, de façon facultative. La liste des marques disponibles SHALL être extensible sans modification de code : ajouter une marque revient à insérer une ligne, jamais à modifier une liste figée dans le code.
 
 #### Scenario: Ajout d'une nouvelle marque
 - **WHEN** un gestionnaire cherche une marque absente de la liste existante lors de l'édition de sa fiche
@@ -28,6 +49,10 @@ Le système SHALL permettre d'associer un magasin à une ou plusieurs marques. L
 #### Scenario: Affichage des marques sur la fiche
 - **WHEN** un rider consulte la fiche d'un magasin
 - **THEN** la liste des marques vendues est affichée
+
+#### Scenario: Magasin sans marque
+- **WHEN** un bar ou un restaurant n'a aucune marque associée à sa fiche
+- **THEN** la section marques n'apparaît simplement pas sur la fiche, sans erreur
 
 ---
 
@@ -62,11 +87,11 @@ Le système SHALL permettre au gestionnaire de déclarer une période de fermetu
 ---
 
 ### Requirement: Affichage des magasins sur la carte principale
-Le système SHALL afficher les magasins validés sur la carte principale avec un marqueur visuellement distinct de celui des spots et des events. Les magasins SHALL être filtrables indépendamment des spots et des events.
+Le système SHALL afficher les magasins validés sur la carte principale avec un marqueur visuellement distinct de celui des spots et des events, coloré selon leur statut ouvert/fermé et portant l'icône de leur type de commerce. Contrairement aux events, les magasins SHALL toujours être affichés, sans filtre de fenêtre temporelle (voir map-core). Les magasins SHALL être filtrables indépendamment des spots et des events.
 
 #### Scenario: Marqueur magasin sur la carte
 - **WHEN** un rider consulte la carte principale
-- **THEN** les magasins validés autour de lui apparaissent avec un marqueur distinct des spots et des events (voir map-core)
+- **THEN** les magasins validés autour de lui apparaissent avec un marqueur distinct des spots et des events, coloré ouvert/fermé, avec l'icône de leur type de commerce (voir map-core)
 
 #### Scenario: Filtre carte magasins uniquement
 - **WHEN** un rider active le filtre "Magasins" et désactive les autres
