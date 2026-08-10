@@ -2,14 +2,14 @@
 
 Les notifications push sont le mécanisme de rétention principal de MeetNShred : elles ramènent le rider au bon moment (terrain qui ouvre, places qui partent, event annulé, rider suivi qui organise quelque chose). Le cahier des charges définit 4 types au MVP. Aucune notification n'est envoyée en dehors d'un abonnement explicite du rider (spot suivi, event rejoint, rider suivi) — pas de notifications de masse non ciblées.
 
-Point important découvert en analysant les changes existants : `spot-core` (statut, inscriptions) et `rider-profile` (profil public) référencent déjà un "follow" / "followers count" sans jamais le spécifier. `notifications-push` est le premier change qui a besoin de ce mécanisme pour résoudre ses destinataires — il en devient donc le propriétaire de fait au MVP (voir Open Questions).
+Le suivi entre riders (`rider_follows`) est désormais spécifié et possédé par `rider-social` (fil d'activité + suivi + messagerie directe entre riders). `notifications-push` consomme cette relation pour cibler ses envois mais n'en est plus propriétaire. Le suivi d'un spot (`spot_follows`) reste en revanche géré ici : suivre un spot ne sert qu'à être notifié de son statut/ses places, ça n'a pas de dimension "activité sociale".
 
 ## Goals / Non-Goals
 
 **Goals:**
 - Enregistrement d'un token push par device au login (FCM Android, APNs iOS), un rider peut avoir plusieurs devices actifs
-- Suivi d'un spot et suivi d'un rider (abonnements) comme base de ciblage
-- 4 types de notifications au MVP : ouverture d'un spot suivi, places limitées sur un spot suivi, event rejoint annulé/modifié, rider suivi crée ou annule un event
+- Suivi d'un spot (abonnement propre à ce change) et consommation du suivi d'un rider (défini dans rider-social) comme base de ciblage
+- 5 types de notifications au MVP : ouverture d'un spot suivi, places limitées sur un spot suivi, event rejoint annulé/modifié, rider suivi crée ou annule un event, nouveau message direct reçu (voir rider-social)
 - Contenu de la notification localisé dans la langue du rider (voir i18n-core)
 - Désactivation automatique des tokens invalides (device désinstallé, token expiré)
 - Journalisation des envois pour debug (`notification_logs`)
@@ -25,12 +25,12 @@ Point important découvert en analysant les changes existants : `spot-core` (sta
 **Tokens push multi-device**
 → Table `push_tokens` (rider_id, token, platform, device_id, created_at, last_used_at). Un rider peut être connecté sur plusieurs appareils ; chaque token reçoit l'envoi. Un token qui échoue de façon définitive (`NotRegistered` FCM / `Unregistered` APNs) est désactivé automatiquement, pas juste ignoré silencieusement.
 
-**Abonnements comme base de ciblage — `spot_follows` et `rider_follows`**
-→ Deux tables légères introduites par ce change :
-- `spot_follows` (rider_id, spot_id, created_at) — un rider suit un spot pour être notifié de son statut/places
-- `rider_follows` (follower_id, followed_id, created_at) — un rider suit un autre rider pour être notifié de ses créations d'event
+**Abonnements comme base de ciblage — `spot_follows` (ici) et `rider_follows` (rider-social)**
+→ `spot_follows` (rider_id, spot_id, created_at) est introduite par ce change : un rider suit un spot pour être notifié de son statut/places. Elle alimente le `followers count` affiché sur `spot-page` (`spot-core`).
 
-Ces deux tables alimentent le `followers count` déjà affiché dans `rider-profile` et `spot-page` (`spot-core`). Pas de table équivalente pour les events : les destinataires d'une notif d'annulation/modification sont directement les lignes de `event_inscriptions` (voir events-core), pas besoin d'abonnement séparé.
+`rider_follows` (follower_id, followed_id, created_at) est définie et possédée par `rider-social` — ce change s'y réfère uniquement pour savoir qui notifier quand un rider suivi crée/annule un event.
+
+Pas de table équivalente pour les events : les destinataires d'une notif d'annulation/modification sont directement les lignes de `event_inscriptions` (voir events-core), pas besoin d'abonnement séparé.
 
 **Types de notifications en config, pas en enum**
 → Cohérent avec le principe déjà appliqué aux disciplines et aux types d'events : `configs/notification-types.json` liste les 4 types MVP (slug, label `{ fr, en, es }`, déclencheur). Ajouter un 5e type en Phase 2 (ex. rappel avant une session) n'exige pas de modification de code, seulement une nouvelle entrée de config + le trigger correspondant.
@@ -45,10 +45,9 @@ Ces deux tables alimentent le `followers count` déjà affiché dans `rider-prof
 
 - [Tokens obsolètes] Devices désinstallés sans déconnexion propre → désactivation automatique sur échec d'envoi FCM/APNs (`NotRegistered`/`Unregistered`), pas de nettoyage périodique nécessaire au MVP
 - [Spam de notifications] Un rider très suivi qui crée/annule beaucoup d'events → pas de rate limiting au MVP, à surveiller en Phase 2 si signalé
-- [Ownership du follow] `spot_follows`/`rider_follows` créées ici alors que le concept est utilisé ailleurs → voir Open Questions
+- [Dépendance à rider-social] Ce change dépend désormais de `rider-social` pour résoudre les destinataires du trigger "rider suivi crée/annule un event" → les deux changes doivent être implémentés dans le bon ordre (rider-social avant, ou en parallèle avec coordination sur le schéma `rider_follows`)
 - [Notification dupliquée multi-device] Un rider avec 2 devices reçoit 2 notifications pour le même événement → accepté au MVP (comportement standard push), pas de déduplication cross-device
 
 ## Open Questions
 
-- `spot_follows` et `rider_follows` sont introduites par ce change car c'est le premier besoin concret, mais conceptuellement elles appartiennent aussi à `spot-core` (bouton "suivre" sur la page spot) et `rider-profile` (bouton "suivre" sur le profil, `followers count`). Faut-il les documenter aussi dans ces deux changes en `MODIFIED Requirements`, ou notifications-push reste-t-il la source de vérité unique pour le schéma des deux tables ? À trancher avant l'implémentation.
 - Faut-il un endpoint `GET /notifications` (historique in-app) au MVP ou est-ce strictement Phase 2 ? Le proposal actuel n'en parle pas — supposé Phase 2 pour l'instant.

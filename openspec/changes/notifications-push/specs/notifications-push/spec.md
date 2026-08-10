@@ -30,19 +30,6 @@ Le système SHALL permettre à un rider connecté de suivre ou ne plus suivre un
 
 ---
 
-### Requirement: Suivi d'un rider
-Le système SHALL permettre à un rider connecté de suivre ou ne plus suivre un autre rider. Le nombre de followers SHALL être exposé sur le profil public du rider suivi (voir rider-profile).
-
-#### Scenario: Suivre un rider
-- **WHEN** un rider tape "Suivre" sur le profil d'un autre rider
-- **THEN** le système enregistre l'abonnement et incrémente le compteur de followers du rider suivi
-
-#### Scenario: Ne plus suivre un rider
-- **WHEN** un rider tape "Ne plus suivre" sur un rider déjà suivi
-- **THEN** le système supprime l'abonnement et décrémente le compteur de followers
-
----
-
 ### Requirement: Notification à l'ouverture d'un spot suivi
 Le système SHALL envoyer une notification push à tous les followers d'un spot quand celui-ci passe d'un statut fermé à un statut ouvert (`open`). Le contenu SHALL être localisé dans la langue de chaque destinataire (voir i18n-core).
 
@@ -83,7 +70,7 @@ Le système SHALL envoyer une notification push à tous les riders inscrits quan
 ---
 
 ### Requirement: Notification lors d'une création ou annulation d'event par un rider suivi
-Le système SHALL envoyer une notification push aux followers d'un rider quand celui-ci crée un event ou annule un event qu'il avait créé.
+Le système SHALL envoyer une notification push aux followers d'un rider quand celui-ci crée un event ou annule un event qu'il avait créé. La relation de suivi entre riders SHALL être celle définie dans rider-social (voir rider-social, capability rider-follow).
 
 #### Scenario: Rider suivi crée un event
 - **WHEN** un rider suivi crée un nouvel event
@@ -92,6 +79,15 @@ Le système SHALL envoyer une notification push aux followers d'un rider quand c
 #### Scenario: Rider suivi annule un event qu'il a créé
 - **WHEN** un rider suivi annule un event qu'il avait créé
 - **THEN** tous ses followers reçoivent une notification push
+
+---
+
+### Requirement: Notification de nouveau message direct
+Le système SHALL envoyer une notification push au destinataire d'un message direct quand celui-ci est envoyé (voir rider-social, capability direct-messages).
+
+#### Scenario: Nouveau message reçu
+- **WHEN** un rider envoie un message direct à un autre rider
+- **THEN** le destinataire reçoit une notification push avec un aperçu du message, dans sa langue
 
 ---
 
