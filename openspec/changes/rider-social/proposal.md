@@ -8,6 +8,7 @@ Le profil et les events créent une identité et des occasions de se croiser, ma
 - Fil d'activité : voir les actions publiques des riders qu'on suit (event rejoint, event créé, nouveau setup matériel ajouté)
 - Messagerie directe (texte, 1:1) entre riders uniquement — pas avec les gestionnaires de spot/magasin
 - `rider_follows` devient la table de référence, reprise depuis `notifications-push` qui la consommait déjà pour ses triggers
+- Blocage et signalement d'un rider — nécessaire vu que le suivi et la messagerie sont ouverts sans validation
 
 ## Capabilities
 
@@ -15,6 +16,7 @@ Le profil et les events créent une identité et des occasions de se croiser, ma
 - `rider-follow`: Suivre/ne plus suivre un rider, libre et sans validation, compteur de followers, liste des abonnements
 - `activity-feed`: Fil chronologique des activités publiques des riders suivis
 - `direct-messages`: Conversations privées texte, 1:1, entre riders
+- `rider-safety`: Blocage bidirectionnel entre riders, signalement d'un profil ou d'un message, file de modération pour le super admin
 
 ### Modified Capabilities
 - `notifications-push`: ne possède plus `rider_follows`, la consomme depuis `rider-social` ; gagne un 5e type de notification (nouveau message)
@@ -22,8 +24,9 @@ Le profil et les events créent une identité et des occasions de se croiser, ma
 ## Impact
 
 - Table `rider_follows` (déplacée depuis `notifications-push`, qui la consommait déjà sans la posséder)
-- Tables `rider_activities`, `conversations`, `messages`
+- Tables `rider_activities`, `conversations`, `messages`, `rider_blocks`, `rider_reports`
 - Dépend de `rider-profile` (profil public, followers count déjà référencé mais jamais spécifié)
 - Dépend d'`events-core` (activités "rejoint un event" / "a créé un event") et de `rider-equipment` (activité "a ajouté un setup")
 - Ajoute un trigger de notification push pour les nouveaux messages (voir notifications-push)
-- Sujet de sécurité à trancher avant implémentation : blocage/signalement d'un rider (voir design.md, Open Questions)
+- Le blocage coupe le suivi, la messagerie et la visibilité du profil/des activités dans les deux sens
+- Nouvel écran super admin : file de signalements à traiter
