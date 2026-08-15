@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Page publique d'un spot
-Le système SHALL exposer une page publique pour chaque spot contenant : nom, catégorie (privé/public), description, photos, coordonnées GPS, discipline(s) couverte(s), compteur de followers. Un spot **privé** SHALL en plus afficher : statut en temps réel, tarifs adhérent/non-adhérent, capacité maximale, places restantes, lien de paiement. Un spot **public** ne SHALL pas afficher ces champs de gestion commerciale — sa page met en avant les sessions à venir (voir sessions-core). Les labels de statut SHALL être affichés dans la langue du rider (voir i18n-core).
+Le système SHALL exposer une page publique pour chaque spot contenant : nom, catégorie (privé/public), description, photos, coordonnées GPS, discipline(s) couverte(s), compteur de followers, note moyenne et nombre d'avis (voir reviews-core). Un spot **privé** SHALL en plus afficher : statut en temps réel, tarifs adhérent/non-adhérent, capacité maximale, places restantes, lien de paiement. Un spot **public** ne SHALL pas afficher ces champs de gestion commerciale — sa page met en avant les sessions à venir (voir sessions-core). Les labels de statut SHALL être affichés dans la langue du rider (voir i18n-core).
 
 #### Scenario: Consultation d'une page spot privé
 - **WHEN** un rider consulte `GET /spots/:id` pour un spot privé

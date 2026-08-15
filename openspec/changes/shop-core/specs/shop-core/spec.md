@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Fiche publique d'un magasin
-Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, type de commerce, description, photos, adresse/coordonnées GPS, discipline(s) couvertes (si applicable), marques vendues (si applicable), horaires d'ouverture, statut ouvert/fermé calculé en temps réel.
+Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, type de commerce, description, photos, adresse/coordonnées GPS, discipline(s) couvertes (si applicable), marques vendues (si applicable), horaires d'ouverture, statut ouvert/fermé calculé en temps réel, note moyenne et nombre d'avis (voir reviews-core).
 
 #### Scenario: Consultation d'une fiche magasin
 - **WHEN** un rider consulte la fiche d'un magasin validé

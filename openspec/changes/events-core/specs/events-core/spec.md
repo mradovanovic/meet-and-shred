@@ -87,7 +87,7 @@ Le système SHALL filtrer le feed d'events par les disciplines du rider (pré-s�
 ---
 
 ### Requirement: Détail d'un event
-Le système SHALL exposer une page de détail pour chaque event avec : titre, type localisé, description, date/heure, lieu (adresse + mini-carte), discipline(s), organisateur, capacité (si définie), places restantes, liste des riders inscrits, bouton inscription/désinscription, bouton partage.
+Le système SHALL exposer une page de détail pour chaque event avec : titre, type localisé, description, date/heure, lieu (adresse + mini-carte), discipline(s), organisateur, capacité (si définie), places restantes, liste des riders inscrits, bouton inscription/désinscription, bouton partage, note moyenne et nombre d'avis une fois l'event terminé (voir reviews-core).
 
 #### Scenario: Event avec capacité
 - **WHEN** un rider consulte un track day avec 5 places restantes sur 30
