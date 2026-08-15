@@ -62,6 +62,9 @@ Un spot multi-disciplines affiche le statut de sa discipline principale (premiè
 **Lien paiement = simple URL**
 → Le gestionnaire renseigne une URL (FFM, HelloAsso, PayPal...). L'app ouvre ce lien dans le navigateur.
 
+**Statistiques minimales pour le gestionnaire**
+→ Compteur de vues (incrémenté à chaque consultation de la fiche, agrégé par jour pour permettre le calcul sur 30 jours) et total d'inscriptions déjà disponible via `spot_inscriptions`. Rien de plus sophistiqué au MVP (pas de graphique détaillé, pas d'export) — l'objectif est de donner un signal basique d'activité, pas un tableau de bord complet.
+
 ## Risks / Trade-offs
 
 - [Spot multi-disciplines] Statut affiché = statut de la discipline principale → Documenter clairement pour les gestionnaires

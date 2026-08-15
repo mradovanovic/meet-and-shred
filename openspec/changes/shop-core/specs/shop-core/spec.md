@@ -1,11 +1,19 @@
 ## ADDED Requirements
 
 ### Requirement: Fiche publique d'un magasin
-Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, type de commerce, description, photos, adresse/coordonnées GPS, discipline(s) couvertes (si applicable), marques vendues (si applicable), horaires d'ouverture, statut ouvert/fermé calculé en temps réel, note moyenne et nombre d'avis (voir reviews-core).
+Le système SHALL exposer une fiche publique pour chaque magasin validé, contenant : nom, type de commerce, description, photos, adresse/coordonnées GPS, discipline(s) couvertes (si applicable), marques vendues (si applicable), horaires d'ouverture, statut ouvert/fermé calculé en temps réel, note moyenne et nombre d'avis (voir reviews-core), site web et réseaux sociaux (facultatifs).
 
 #### Scenario: Consultation d'une fiche magasin
 - **WHEN** un rider consulte la fiche d'un magasin validé
 - **THEN** le système retourne toutes les données publiques du magasin, avec le statut ouvert/fermé calculé selon les horaires du jour
+
+#### Scenario: Fiche avec site web et réseaux sociaux
+- **WHEN** un gestionnaire a renseigné un site web et des liens réseaux sociaux
+- **THEN** ces liens sont affichés sur la fiche et s'ouvrent dans le navigateur natif au tap
+
+#### Scenario: Fiche sans site web ni réseaux sociaux
+- **WHEN** un gestionnaire n'a renseigné aucun de ces champs
+- **THEN** la section ne s'affiche simplement pas sur la fiche
 
 ---
 
@@ -131,3 +139,25 @@ Le système SHALL permettre au gestionnaire d'un magasin validé de créer un ev
 #### Scenario: Event magasin visible dans le feed
 - **WHEN** un rider dont les disciplines correspondent consulte le feed d'events
 - **THEN** les events créés par des magasins apparaissent au même titre que les autres events, avec le nom du magasin comme organisateur
+
+---
+
+### Requirement: Partage d'un magasin
+Le système SHALL permettre à un rider de partager la fiche d'un magasin via un deep link ouvrant le panneau de partage natif, sur le même principe que le partage d'event (voir events-core).
+
+#### Scenario: Partage d'une fiche magasin
+- **WHEN** un rider tape "Partager" sur la fiche d'un magasin
+- **THEN** le panneau de partage natif s'ouvre avec le deep link de la fiche
+
+---
+
+### Requirement: Statistiques de fréquentation pour le gestionnaire
+Le système SHALL afficher au gestionnaire d'un magasin des statistiques de base sur son back-office : nombre de vues de la fiche sur les 30 derniers jours, nombre d'events créés, nombre de followers.
+
+#### Scenario: Consultation des statistiques
+- **WHEN** le gestionnaire d'un magasin ouvre l'onglet statistiques de son back-office
+- **THEN** il voit le nombre de vues des 30 derniers jours, le nombre d'events créés et le nombre de followers
+
+#### Scenario: Magasin sans historique
+- **WHEN** un magasin vient d'être publié et n'a encore aucune vue ni event créé
+- **THEN** les statistiques affichent des compteurs à zéro plutôt qu'un écran vide ou une erreur

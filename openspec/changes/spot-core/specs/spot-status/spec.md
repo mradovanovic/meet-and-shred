@@ -42,3 +42,16 @@ Un spot de catégorie **publique** ne SHALL pas avoir de statut piloté par un g
 #### Scenario: Pas d'écran de gestion de statut
 - **WHEN** le créateur d'un spot public consulte sa fiche
 - **THEN** aucune option de changement de statut ne lui est proposée, puisqu'il n'est pas gestionnaire du lieu
+
+---
+
+### Requirement: Statistiques de fréquentation pour le gestionnaire
+Le système SHALL afficher au gestionnaire d'un spot privé des statistiques de base sur son back-office : nombre de vues de la fiche sur les 30 derniers jours, nombre d'inscriptions cumulées, nombre de followers.
+
+#### Scenario: Consultation des statistiques
+- **WHEN** le gestionnaire d'un spot ouvre l'onglet statistiques de son back-office
+- **THEN** il voit le nombre de vues des 30 derniers jours, le total d'inscriptions et le nombre de followers
+
+#### Scenario: Spot sans historique
+- **WHEN** un spot vient d'être publié et n'a encore aucune vue ni inscription
+- **THEN** les statistiques affichent des compteurs à zéro plutôt qu'un écran vide ou une erreur

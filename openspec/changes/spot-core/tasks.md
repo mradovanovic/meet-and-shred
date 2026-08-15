@@ -6,6 +6,7 @@
 - [ ] 1.4 Créer la table `spot_inscriptions` (id, spot_id, rider_id, payment_mode, created_at) avec contrainte UNIQUE (spot_id, rider_id)
 - [ ] 1.5 Créer la table `spot_managers` (spot_id, user_id, role) — multi-gestionnaires
 - [ ] 1.6 Index géospatial sur `spots.(lat, lng)` et index sur `spots.current_status`
+- [ ] 1.7 Créer la table `spot_views` (spot_id, day, count) — compteur de vues agrégé par jour
 
 ## 2. Configs statuts par discipline
 
@@ -17,8 +18,9 @@
 ## 3. API Spots — Publique
 
 - [ ] 3.1 `GET /spots` — liste paginée avec filtres (discipline, status, lat, lng, radius)
-- [ ] 3.2 `GET /spots/:id` — détail d'un spot avec statut localisé, places restantes, disciplines
+- [ ] 3.2 `GET /spots/:id` — détail d'un spot avec statut localisé, places restantes, disciplines ; incrémente `spot_views` du jour à chaque consultation
 - [ ] 3.3 `GET /spots/nearby` — spots dans un rayon GPS
+- [ ] 3.4 `GET /spots/:id/share` — génération du deep link de partage (même principe que events-core)
 
 ## 4. API Spots — Inscriptions
 
@@ -37,6 +39,7 @@
 - [ ] 5.6 `GET /spots/:id/status-options` — liste des statuts disponibles pour ce spot (spots privés uniquement, selon discipline principale + langue)
 - [ ] 5.8 `GET /spots/pending` — liste des spots en attente de validation (super admin)
 - [ ] 5.9 `POST /spots/:id/validate` — validation et publication (super admin)
+- [ ] 5.10 `GET /spots/:id/stats` — vues des 30 derniers jours, total inscriptions, nombre de followers (gestionnaire uniquement)
 
 ## 6. Mobile — Page publique
 
@@ -46,6 +49,7 @@
 - [ ] 6.3 Compteur de places restantes avec alerte si <20% disponibles — spots privés
 - [ ] 6.4 Ouverture du lien paiement dans le navigateur natif — spots privés
 - [ ] 6.6 Écran de soumission d'un nouveau spot : choix de la catégorie (privé/public) en premier, formulaire adapté ensuite (champs tarifs/capacité/paiement masqués si public)
+- [ ] 6.7 Bouton "Partager" sur la page spot (privé et public)
 
 ## 7. Mobile — Back-office spot (gestionnaire de spot privé)
 
@@ -53,3 +57,4 @@
 - [ ] 7.2 Écran édition du spot (tarifs, capacité, lien paiement, disciplines)
 - [ ] 7.3 Liste des riders inscrits à la session en cours
 - [ ] 7.4 Écran super admin : validation des spots en attente (privés et publics)
+- [ ] 7.5 Onglet statistiques dans le back-office (vues 30 jours, inscriptions cumulées, followers)

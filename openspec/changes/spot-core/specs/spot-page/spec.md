@@ -70,3 +70,12 @@ Chaque spot SHALL avoir une adresse lisible ET des coordonnées GPS (latitude, l
 #### Scenario: Calcul de distance
 - **WHEN** un rider à 45 km d'un spot consulte la liste des spots
 - **THEN** le système affiche "45 km" sous le nom du spot
+
+---
+
+### Requirement: Partage d'un spot
+Le système SHALL permettre à un rider de partager la page d'un spot (privé ou public) via un deep link ouvrant le panneau de partage natif, sur le même principe que le partage d'event (voir events-core).
+
+#### Scenario: Partage d'une page spot
+- **WHEN** un rider tape "Partager" sur la page d'un spot
+- **THEN** le panneau de partage natif s'ouvre avec le deep link de la page
