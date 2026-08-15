@@ -10,6 +10,7 @@
 - [ ] 2.2 `GET /sessions/:id` — détail avec participants
 - [ ] 2.3 `POST /sessions/:id/join` / `DELETE /sessions/:id/join` — rejoindre/quitter
 - [ ] 2.4 `GET /spots/:id/sessions` — sessions à venir liées à un spot
+- [ ] 2.5 `GET /sessions` — fil paginé avec filtres (disciplines[] résolues via le spot lié, lat, lng, radius)
 
 ## 3. Intégration carte
 
@@ -21,9 +22,12 @@
 - [ ] 4.2 Marqueur session sur la carte, couleur active/à venir
 - [ ] 4.3 Page session (spot, créateur, date, participants, bouton rejoindre/quitter, rappel inscription si spot privé)
 - [ ] 4.4 Bouton "Créer une session" depuis la page d'un spot (privé ou public)
+- [ ] 4.5 Fil de sessions swipable (composant partagé avec le fil d'events), toggle Events/Sessions (voir navigation-core)
+- [ ] 4.6 Vue liste alternative du fil de sessions
 
 ## 5. Coordination avec les autres changes
 
 - [ ] 5.1 events-core : confirmer le retrait du type `social_ride`, remplacé par ce change
 - [ ] 5.2 spot-core : consommer le champ `category` (privé/public) pour l'affichage du rappel d'inscription
 - [ ] 5.3 map-core : ajouter les sessions comme 4e type de marqueur, avec filtre dédié
+- [ ] 5.4 navigation-core : intégrer le fil de sessions dans l'écran "Fil" partagé avec events

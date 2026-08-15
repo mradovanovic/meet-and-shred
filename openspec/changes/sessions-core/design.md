@@ -13,9 +13,9 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 - N'importe quel rider peut rejoindre ou quitter une session librement
 - Pas de capacité, pas de paiement, pas de validation — mécanisme volontairement léger
 - Visible sur la carte dans la fenêtre de 2 semaines, avec la distinction "en cours" / "à venir" déjà utilisée pour les events
+- Fil de sessions swipable, sur le même principe que le fil d'events (voir navigation-core pour son intégration dans l'app)
 
 **Non-Goals:**
-- Swipe dédié aux sessions (le swipe reste propre au feed d'events au MVP)
 - Capacité ou limite de participants sur une session
 - Paiement lié à une session
 - Notifications automatiques de création de session (voir Open Questions — cohérent avec le système existant mais pas confirmé)
@@ -37,6 +37,9 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 
 **Affichage carte**
 → Marqueur distinct des spots, events et magasins, même fenêtre de 2 semaines et même logique active/à venir que les events (voir map-core).
+
+**Fil de sessions, filtré via les disciplines du spot lié**
+→ Pas de champ discipline propre à la session : le filtrage par discipline/distance du fil de sessions se base sur les disciplines du spot lié (`spot_disciplines`, voir spot-core), comme la carte le fait déjà pour les marqueurs sessions. Le fil de sessions vit dans le même écran "Fil" que le fil d'events, avec un toggle pour basculer entre les deux (voir navigation-core) — pas un onglet séparé dans la navigation principale.
 
 **Pas de champ "heure de fin" saisi par le créateur**
 → Pour garder la création aussi rapide qu'un event social ride, le rider ne saisit qu'une heure de début (`starts_at`), pas d'heure de fin. Une session est considérée "en cours" entre `starts_at` et `starts_at + 3h` (durée par défaut fixe), "à venir" avant, et sort de la carte après. Ce n'est qu'un calcul d'affichage, pas une contrainte sur la session elle-même — elle reste rejoignable au-delà si sa page est consultée directement.

@@ -91,7 +91,8 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 | `rider-profile` | Specs complètes | Profil, disciplines, fiches matériel JSONB, upload photos |
 | `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement) ou public (gratuit), statuts en config, inscriptions, paiement externe |
 | `events-core` | Specs complètes | Events (spot_opening, track_day, competition, shop_event — tous réservés à un rôle), swipe, feed filtré |
-| `sessions-core` | Specs complètes | Sessions de ride créées librement par un rider, liées à un spot privé ou public, rejoignables par d'autres riders |
+| `sessions-core` | Specs complètes | Sessions de ride créées librement par un rider, liées à un spot privé ou public, rejoignables par d'autres riders, fil swipable |
+| `navigation-core` | Specs complètes | Barre de navigation (Carte/Fil/Créer/Messages/Profil), fil combiné events+sessions, hub de création par rôle |
 | `map-core` | Specs complètes | Carte Google Maps principale, marqueurs spots/events/sessions/magasins, filtres |
 | `i18n-core` | Specs complètes | FR/EN/ES, préférence utilisateur, middleware langue |
 | `notifications-push` | Specs complètes | FCM + APNs, tokens push, 4 types de notifications, suivi spot/rider |

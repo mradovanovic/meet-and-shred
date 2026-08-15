@@ -47,6 +47,27 @@ Le système SHALL afficher les sessions dont la date de début est comprise entr
 
 ---
 
+### Requirement: Fil de sessions avec swipe
+Le système SHALL présenter les sessions à venir sous forme de cartes swipables, filtrées par les disciplines du rider (celles du spot lié à chaque session) et par distance — même mécanique que le fil d'events (voir events-core). Un swipe à droite SHALL rejoindre immédiatement la session.
+
+#### Scenario: Swipe right — rejoindre
+- **WHEN** le rider swipe une carte session vers la droite
+- **THEN** il rejoint la session immédiatement, avec un feedback visuel identique à celui du fil d'events
+
+#### Scenario: Swipe left — passer
+- **WHEN** le rider swipe une carte session vers la gauche
+- **THEN** la session est retirée de son fil sans qu'il la rejoigne
+
+#### Scenario: Vue liste alternative
+- **WHEN** le rider bascule le fil de sessions en vue liste
+- **THEN** les mêmes sessions filtrées s'affichent chronologiquement avec date, spot et distance
+
+#### Scenario: Fil de sessions vide
+- **WHEN** aucune session ne correspond aux disciplines et à la distance du rider
+- **THEN** le système affiche "Aucune session dans ta zone — élargis ton rayon ou crée la tienne"
+
+---
+
 ### Requirement: Page d'une session
 Le système SHALL exposer le détail d'une session : spot lié, créateur, date/heure, liste des participants, bouton rejoindre/quitter. Si le spot lié est privé, la page SHALL rappeler qu'une inscription séparée peut être requise par le gestionnaire.
 
