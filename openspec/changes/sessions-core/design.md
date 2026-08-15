@@ -15,6 +15,7 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 - Visible sur la carte dans la fenêtre de 2 semaines, avec la distinction "en cours" / "à venir" déjà utilisée pour les events
 - Fil de sessions swipable, sur le même principe que le fil d'events (voir navigation-core pour son intégration dans l'app)
 - Le créateur peut annuler sa session explicitement, avec notification aux participants
+- Avertissement (pas un blocage) en cas de chevauchement horaire avec un autre event ou une autre session déjà pris par le rider
 
 **Non-Goals:**
 - Capacité ou limite de participants sur une session
@@ -47,6 +48,9 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 
 **Annulation explicite plutôt que disparition silencieuse**
 → Une session a un `status` (`active` / `cancelled`). Le créateur peut l'annuler à tout moment tant qu'elle est encore visible (dans la fenêtre de 2 semaines) ; ses participants sont notifiés (nouveau trigger dans notifications-push). Ça évite qu'un rider arrive sur place pour rien parce que le créateur a changé d'avis sans prévenir — l'ancienne approche ("elle disparaît juste après sa fenêtre") ne couvrait pas ce cas, seulement l'oubli passif.
+
+**Chevauchement horaire — même traitement que côté events**
+→ Cohérent avec events-core : avertissement après swipe (ajouté au snackbar "Annuler" existant) ou confirmation explicite depuis la page de session, jamais un blocage silencieux. La vérification croise `session_participants` et `event_inscriptions` sur les plages horaires — une session utilise `starts_at` à `starts_at + 3h` (voir la décision sur l'absence de champ "heure de fin").
 
 ## Risks / Trade-offs
 

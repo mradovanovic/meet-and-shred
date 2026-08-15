@@ -46,9 +46,13 @@ L'ancien type `social_ride` (créable par tout rider) est retiré : les sorties 
 **Disciplines sur les events**
 → Un event peut couvrir plusieurs disciplines. Liaison N:N avec `disciplines`.
 
+**Chevauchement horaire — avertissement, pas blocage**
+→ Un rider ne peut pas physiquement être à deux endroits en même temps, mais un blocage strict risque de générer des faux positifs (ex : deux sessions avec une fenêtre active de 3h qui se recoupent de 10 minutes sans réel conflit). Le système avertit plutôt que d'empêcher : après un swipe, le chevauchement s'ajoute au snackbar "Annuler" déjà existant (même fenêtre de 3 secondes, cohérent avec le principe "swipe = action directe, pas de popup") ; depuis la page de détail (hors swipe), une confirmation explicite s'affiche avant de finaliser. La vérification croise `event_inscriptions` et `session_participants` (voir sessions-core) sur les plages `starts_at`/`ends_at`.
+
 ## Risks / Trade-offs
 
 - [Swipe involontaire] Rider swipe accidentellement → Bouton "Annuler" visible 3 secondes post-inscription (snackbar)
 - [Events obsolètes] Events passés → Archivage automatique 24h après `ends_at`
 - [Roulages payants] Track days avec tarif → Lien paiement externe comme les spots au MVP, natif en Phase 3
 - [Retrait de social_ride] Les sessions déjà créées comme `social_ride` avant ce changement (s'il y en avait en prod) devraient être migrées vers `sessions-core` — sans objet au MVP puisque rien n'est encore implémenté
+- [Faux positif de chevauchement] Deux engagements proches mais pas réellement incompatibles (ex : deux spots voisins) génèrent quand même un avertissement → assumé, le rider reste juge, l'avertissement n'est jamais bloquant

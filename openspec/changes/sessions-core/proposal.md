@@ -10,6 +10,7 @@ Beaucoup de sorties sont spontanées et informelles — un rider veut simplement
 - Visible sur la carte dans la même fenêtre de 2 semaines que les events, avec la même distinction "en cours" (couleur active) / "à venir" (couleur atténuée)
 - Fil de sessions swipable, sur le même principe que le fil d'events — intégré dans le même écran "Fil" avec un toggle (voir navigation-core)
 - Le créateur peut annuler explicitement sa session, avec notification aux participants
+- Avertissement (pas un blocage) si la session chevauche dans le temps un autre event ou une autre session déjà pris par le rider
 - Remplace l'ancien type d'event `social_ride`, retiré d'events-core (voir events-core)
 
 ## Capabilities
@@ -26,4 +27,5 @@ Beaucoup de sorties sont spontanées et informelles — un rider veut simplement
 - Tables `sessions`, `session_participants`
 - Dépend de `spot-core` (spot_id, catégorie privé/public du spot lié)
 - Dépend de `map-core` (affichage, fenêtre de 2 semaines, distinction actif/à venir)
+- Dépend d'`events-core` (`event_inscriptions`) pour la détection de chevauchement horaire, partagée entre les deux changes
 - N'introduit ni rôle, ni validation, ni paiement, ni capacité — volontairement minimaliste

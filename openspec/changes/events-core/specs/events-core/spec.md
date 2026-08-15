@@ -64,6 +64,23 @@ Le système SHALL présenter les events à venir sous forme de cartes swipables 
 
 ---
 
+### Requirement: Avertissement en cas de chevauchement horaire
+Avant de finaliser une inscription à un event, le système SHALL vérifier si ses horaires (`starts_at`/`ends_at`) chevauchent un autre event ou une session auxquels le rider est déjà inscrit/participant (voir sessions-core). En cas de chevauchement, le système SHALL avertir le rider avant de considérer l'inscription comme définitive, sans la bloquer silencieusement.
+
+#### Scenario: Chevauchement détecté après un swipe
+- **WHEN** un rider swipe pour rejoindre un event qui chevauche un autre event ou une session déjà rejoints
+- **THEN** le snackbar affiché après le swipe signale le chevauchement ("Chevauche [nom] de 14h à 16h") en plus du bouton "Annuler", pendant les 3 secondes habituelles
+
+#### Scenario: Chevauchement détecté via la page de détail
+- **WHEN** un rider s'inscrit à un event depuis sa page de détail (hors swipe) et que les horaires chevauchent un engagement existant
+- **THEN** le système affiche une confirmation explicite du chevauchement avant de finaliser l'inscription
+
+#### Scenario: Pas de chevauchement
+- **WHEN** les horaires d'un event ne recoupent aucun autre engagement du rider
+- **THEN** aucun avertissement n'est affiché, l'inscription se déroule normalement
+
+---
+
 ### Requirement: Vue liste alternative
 Le système SHALL proposer une vue liste en complément du swipe, affichant les events de façon chronologique.
 

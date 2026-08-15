@@ -30,6 +30,23 @@ Le système SHALL permettre à tout rider connecté de rejoindre ou quitter une 
 
 ---
 
+### Requirement: Avertissement en cas de chevauchement horaire
+Avant de finaliser une participation à une session, le système SHALL vérifier si sa plage (`starts_at` à `starts_at + 3h`) chevauche un autre event ou une autre session auxquels le rider est déjà inscrit/participant (voir events-core). En cas de chevauchement, le système SHALL avertir le rider avant de considérer la participation comme définitive, sans la bloquer silencieusement.
+
+#### Scenario: Chevauchement détecté après un swipe
+- **WHEN** un rider swipe pour rejoindre une session qui chevauche un event ou une autre session déjà rejoints
+- **THEN** le snackbar affiché après le swipe signale le chevauchement, en plus du bouton "Annuler", pendant les 3 secondes habituelles
+
+#### Scenario: Chevauchement détecté via la page de session
+- **WHEN** un rider rejoint une session depuis sa page (hors swipe) et que sa plage chevauche un engagement existant
+- **THEN** le système affiche une confirmation explicite du chevauchement avant de finaliser la participation
+
+#### Scenario: Pas de chevauchement
+- **WHEN** la plage horaire d'une session ne recoupe aucun autre engagement du rider
+- **THEN** aucun avertissement n'est affiché
+
+---
+
 ### Requirement: Affichage des sessions sur la carte
 Le système SHALL afficher les sessions dont la date de début est comprise entre maintenant et les 2 prochaines semaines comme des marqueurs distincts des spots, events et magasins. Une session en cours SHALL être affichée dans une couleur active, une session à venir dans une couleur atténuée — même logique que les events (voir map-core).
 

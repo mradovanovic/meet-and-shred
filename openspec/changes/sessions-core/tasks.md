@@ -8,7 +8,7 @@
 
 - [ ] 2.1 `POST /sessions` — création (spot_id, starts_at, note) — tout rider connecté
 - [ ] 2.2 `GET /sessions/:id` — détail avec participants
-- [ ] 2.3 `POST /sessions/:id/join` / `DELETE /sessions/:id/join` — rejoindre/quitter
+- [ ] 2.3 `POST /sessions/:id/join` / `DELETE /sessions/:id/join` — rejoindre/quitter ; retourne un flag `overlap` avec le(s) engagement(s) concerné(s) si chevauchement détecté avec un event ou une autre session du rider
 - [ ] 2.4 `GET /spots/:id/sessions` — sessions à venir liées à un spot
 - [ ] 2.5 `GET /sessions` — fil paginé avec filtres (disciplines[] résolues via le spot lié, lat, lng, radius)
 - [ ] 2.6 `PATCH /sessions/:id/cancel` — annulation (créateur uniquement) + notification push aux participants
@@ -27,6 +27,7 @@
 - [ ] 4.4 Bouton "Créer une session" depuis la page d'un spot (privé ou public)
 - [ ] 4.5 Fil de sessions swipable (composant partagé avec le fil d'events), toggle Events/Sessions (voir navigation-core)
 - [ ] 4.6 Vue liste alternative du fil de sessions
+- [ ] 4.7 Swipe right sur une session avec `overlap` → snackbar signale le conflit en plus du bouton "Annuler" ; rejoindre depuis la page → confirmation explicite si conflit (voir events-core, même composant partagé)
 
 ## 5. Coordination avec les autres changes
 
@@ -35,3 +36,4 @@
 - [ ] 5.3 map-core : ajouter les sessions comme 4e type de marqueur, avec filtre dédié
 - [ ] 5.4 navigation-core : intégrer le fil de sessions dans l'écran "Fil" partagé avec events
 - [ ] 5.5 notifications-push : ajouter le type "session annulée" (voir notifications-push)
+- [ ] 5.6 events-core : la détection de chevauchement croise `session_participants` et `event_inscriptions`, logique partagée entre les deux changes
