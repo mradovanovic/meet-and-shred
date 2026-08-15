@@ -59,9 +59,10 @@ context: |
 
   ## Périmètre
   - **MVP** : auth-registration, rider-profile, spot-core, events-core,
-    map-core, i18n-core, notifications-push, backoffice-spot, rider-social
-    (suivi libre entre riders, fil d'activité, messagerie directe).
-  - **Phase 2** : calendrier d'ouvertures récurrentes, préférences notifications.
+    map-core, i18n-core, notifications-push (6 types, préférences par type
+    incluses), backoffice-spot, rider-social (suivi libre entre riders, fil
+    d'activité, messagerie directe).
+  - **Phase 2** : calendrier d'ouvertures récurrentes.
   - **Phase 3** : paiement natif intégré, 2FA, messagerie gestionnaire↔rider.
 
   ## Workflow
