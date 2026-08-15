@@ -9,16 +9,17 @@ Le suivi entre riders (`rider_follows`) est désormais spécifié et possédé p
 **Goals:**
 - Enregistrement d'un token push par device au login (FCM Android, APNs iOS), un rider peut avoir plusieurs devices actifs
 - Suivi d'un spot (abonnement propre à ce change) et consommation du suivi d'un rider (défini dans rider-social) comme base de ciblage
-- 5 types de notifications au MVP : ouverture d'un spot suivi, places limitées sur un spot suivi, event rejoint annulé/modifié, rider suivi crée ou annule un event, nouveau message direct reçu (voir rider-social)
+- 6 types de notifications au MVP : ouverture d'un spot suivi, places limitées sur un spot suivi, event rejoint annulé/modifié, rider suivi crée ou annule un event, nouveau message direct reçu (voir rider-social), session annulée (voir sessions-core)
 - Contenu de la notification localisé dans la langue du rider (voir i18n-core)
 - Désactivation automatique des tokens invalides (device désinstallé, token expiré)
 - Journalisation des envois pour debug (`notification_logs`)
+- Préférences de notification par type, activables/désactivables individuellement — avancé au MVP à la demande du produit, plutôt que reporté en Phase 2 comme prévu initialement
 
 **Non-Goals:**
-- Préférences fines de notification par type, activables/désactivables individuellement (Phase 2)
 - Centre de notifications in-app persistant (Phase 2) — au MVP la notification est uniquement système (push natif)
 - Notifications email ou SMS
 - Suggestions automatiques de riders/spots à suivre (recommandation)
+- Préférences par canal (push vs email) — un seul canal existe au MVP (push), la préférence porte uniquement sur le type
 
 ## Decisions
 
@@ -40,6 +41,9 @@ Pas de table équivalente pour les events : les destinataires d'une notif d'annu
 
 **Journalisation**
 → `notification_logs` (id, rider_id, type, payload, status [`sent`/`failed`], sent_at) sert au debug et évite les envois dupliqués (ex. deux triggers sur le même événement de statut).
+
+**Préférences par type, activées par défaut**
+→ `notification_preferences` (rider_id, notification_type, enabled). Absence de ligne = activé par défaut, pour ne pas exiger une initialisation massive à la création du compte (une ligne n'est créée que quand le rider désactive explicitement un type). Le service d'envoi vérifie la préférence juste avant l'envoi, par rider et par type — un type désactivé n'empêche pas les autres types d'être envoyés au même rider, ni ce type d'être envoyé aux autres destinataires d'un même événement (ex. les autres followers d'un spot).
 
 ## Risks / Trade-offs
 

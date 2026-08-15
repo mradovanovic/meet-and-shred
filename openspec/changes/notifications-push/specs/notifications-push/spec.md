@@ -91,12 +91,38 @@ Le système SHALL envoyer une notification push au destinataire d'un message dir
 
 ---
 
+### Requirement: Notification d'annulation d'une session
+Le système SHALL envoyer une notification push à tous les participants d'une session quand son créateur l'annule (voir sessions-core).
+
+#### Scenario: Session annulée
+- **WHEN** le créateur d'une session l'annule
+- **THEN** chaque participant reçoit une notification push l'informant de l'annulation
+
+---
+
 ### Requirement: Types de notifications extensibles via config
 Le système SHALL charger les types de notifications disponibles depuis une config (`configs/notification-types.json`), avec pour chaque type : slug, label multilingue `{ fr, en, es }`, template de message. Le super admin SHALL pouvoir ajouter un type sans modification de code.
 
-#### Scenario: Chargement des 4 types MVP
+#### Scenario: Chargement des types MVP
 - **WHEN** le système résout le type de notification à envoyer pour une ouverture de spot
 - **THEN** il utilise le slug, le label et le template définis dans `configs/notification-types.json`
+
+---
+
+### Requirement: Préférences de notification par type
+Le système SHALL permettre à un rider de désactiver individuellement chaque type de notification depuis les réglages, sans affecter les autres types. Par défaut, tous les types SHALL être activés pour un nouveau rider. Un type désactivé ne SHALL générer aucun envoi, même si les conditions du trigger sont remplies.
+
+#### Scenario: Désactivation d'un type
+- **WHEN** un rider désactive les notifications "Places limitées sur un spot suivi" dans ses réglages
+- **THEN** il ne reçoit plus ce type de notification, mais continue de recevoir les autres types normalement
+
+#### Scenario: Notification non envoyée pour un type désactivé
+- **WHEN** un spot suivi par un rider passe sous 20% de places restantes, mais que ce rider a désactivé ce type de notification
+- **THEN** le système n'envoie aucune notification à ce rider pour cet événement (les autres followers du spot, eux, la reçoivent normalement)
+
+#### Scenario: Réactivation
+- **WHEN** un rider réactive un type de notification précédemment désactivé
+- **THEN** il recommence à recevoir ce type dès le prochain déclencheur
 
 ---
 
