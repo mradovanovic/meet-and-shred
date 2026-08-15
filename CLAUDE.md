@@ -87,7 +87,7 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 
 | Change | Statut | Description |
 |---|---|---|
-| `auth-registration` | Specs complètes | Inscription email/mdp + Google + Apple SSO, JWT, géolocalisation onboarding |
+| `auth-registration` | Specs complètes | Inscription email/mdp + Google + Apple SSO, JWT, géolocalisation onboarding (non bloquante), RGPD (consentement, suppression, export) |
 | `rider-profile` | Specs complètes | Profil, disciplines, fiches matériel JSONB, upload photos |
 | `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement) ou public (gratuit), statuts en config, inscriptions, paiement externe |
 | `events-core` | Specs complètes | Events (spot_opening, track_day, competition, shop_event — tous réservés à un rôle), swipe, feed filtré |
@@ -97,7 +97,9 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 | `i18n-core` | Specs complètes | FR/EN/ES, préférence utilisateur, middleware langue |
 | `notifications-push` | Specs complètes | FCM + APNs, tokens push, 4 types de notifications, suivi spot/rider |
 | `backoffice-spot` | Non démarré | Interface gestionnaire de spot |
-| `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte |
+| `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte, stats, partage |
+| `reviews-core` | Specs complètes | Avis (note + commentaire) sur spots, magasins, events, avec preuve de participation pour spot/event |
+| `moderation-core` | Specs complètes | Signalement de spot/magasin/event/avis, file de modération super admin |
 
 ---
 
