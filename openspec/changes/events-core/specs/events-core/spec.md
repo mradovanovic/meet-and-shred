@@ -14,14 +14,18 @@ Le système SHALL charger les types d'events disponibles depuis une config (tabl
 ---
 
 ### Requirement: Création d'event selon le rôle
-Le système SHALL restreindre la création d'events selon le type : un `social_ride` SHALL être créable par tout rider connecté, un `track_day` ou `competition` SHALL nécessiter un rôle organisateur, un `spot_opening` SHALL nécessiter d'être gestionnaire du spot lié.
-
-#### Scenario: Rider crée un social ride
-- **WHEN** un rider sans rôle particulier crée un event de type `social_ride`
-- **THEN** l'event est créé et visible dans les feeds
+Le système SHALL restreindre la création de tout event selon son type : un `track_day` ou `competition` SHALL nécessiter un rôle organisateur, un `spot_opening` SHALL nécessiter d'être gestionnaire du spot lié, un `shop_event` SHALL nécessiter d'être gestionnaire du magasin lié. Aucun type d'event ne SHALL être créable par un rider sans rôle particulier (voir sessions-core pour les sorties spontanées entre riders).
 
 #### Scenario: Rider tente de créer un track day sans rôle
 - **WHEN** un rider sans rôle organisateur tente de créer un `track_day`
+- **THEN** le système retourne une erreur 403
+
+#### Scenario: Gestionnaire de magasin crée un shop_event
+- **WHEN** le gestionnaire d'un magasin validé crée un event de type `shop_event`
+- **THEN** l'event est créé et lié à ce magasin (voir shop-core)
+
+#### Scenario: Rider tente de créer un shop_event sans être gestionnaire du magasin
+- **WHEN** un rider sans lien de gestion avec le magasin visé tente de créer un `shop_event` pour ce magasin
 - **THEN** le système retourne une erreur 403
 
 ---
@@ -34,7 +38,7 @@ Le système SHALL permettre au créateur de définir une capacité maximale de p
 - **THEN** le système retourne une erreur 409 et le bouton d'inscription est désactivé
 
 #### Scenario: Event sans limite de capacité
-- **WHEN** un social ride est créé sans limite de participants
+- **WHEN** un `shop_event` (ex : apéro de magasin) est créé sans limite de participants
 - **THEN** n'importe quel rider peut s'inscrire sans restriction
 
 ---

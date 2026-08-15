@@ -1,8 +1,8 @@
 ## 1. Base de données et config
 
 - [ ] 1.1 Créer la table `event_types` (id, slug, label JSONB `{fr,en,es}`, icon, required_role, capacity_required) — extensible par super admin
-- [ ] 1.2 Seeder les types de base : spot_opening, track_day, social_ride, competition, shop_event
-- [ ] 1.3 Créer la table `events` (id, event_type_id, title, description, spot_id nullable, lat, lng, address, starts_at, ends_at, status, max_capacity nullable, organizer_id, created_at)
+- [ ] 1.2 Seeder les types de base : spot_opening, track_day, competition, shop_event
+- [ ] 1.3 Créer la table `events` (id, event_type_id, title, description, spot_id nullable, shop_id nullable, lat, lng, address, starts_at, ends_at, status, max_capacity nullable, organizer_id, created_at) — un event a soit spot_id soit shop_id, jamais les deux
 - [ ] 1.4 Créer la table `event_disciplines` (event_id, discipline_id) — liaison N:N
 - [ ] 1.5 Créer la table `event_inscriptions` (id, event_id, rider_id, created_at) avec contrainte UNIQUE (event_id, rider_id)
 - [ ] 1.6 Index géospatial sur `events.(lat, lng)`, index sur `events.starts_at` et `events.status`
@@ -40,8 +40,7 @@
 
 ## 6. Mobile — Création d'event
 
-- [ ] 6.1 Sélection du type d'event (liste depuis API, filtrée selon rôle du rider)
+- [ ] 6.1 Sélection du type d'event (liste depuis API, filtrée selon rôle du rider — aucun type visible pour un rider sans rôle)
 - [ ] 6.2 Formulaire : titre, description, disciplines, date/heure, capacité (optionnelle)
-- [ ] 6.3 Sélection du spot lié (pour spot_opening et track_day)
-- [ ] 6.4 Sélection du lieu sur la carte + autocomplete adresse (pour types sans spot lié)
+- [ ] 6.3 Sélection du spot lié (pour spot_opening, track_day, competition) ou du magasin lié (pour shop_event)
 - [ ] 6.5 Bouton annulation de l'event depuis la page de gestion

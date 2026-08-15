@@ -1,8 +1,8 @@
 ## Context
 
-La carte est l'écran le plus chargé en données. Elle agrège terrains, events et magasins. La performance est critique — un rider en mobilité avec une connexion 4G variable ne doit pas attendre plus de 2 secondes pour voir les marqueurs.
+La carte est l'écran le plus chargé en données. Elle agrège terrains, events, sessions et magasins. La performance est critique — un rider en mobilité avec une connexion 4G variable ne doit pas attendre plus de 2 secondes pour voir les marqueurs.
 
-Les trois types de marqueurs n'ont pas la même logique de présence sur la carte : un spot a un statut temps réel (déjà géré par spot-core), un event n'apparaît que s'il tombe dans les 2 prochaines semaines (au-delà, il encombrerait la carte sans être actionnable), un magasin est toujours affiché puisqu'il n'a pas de date — seule sa couleur change selon qu'il est ouvert ou fermé.
+Les quatre types de marqueurs n'ont pas la même logique de présence sur la carte : un spot a un statut temps réel (déjà géré par spot-core, spots privés uniquement), un event ou une session n'apparaît que s'il tombe dans les 2 prochaines semaines (au-delà, ça encombrerait la carte sans être actionnable) avec la même distinction active/à venir, un magasin est toujours affiché puisqu'il n'a pas de date — seule sa couleur change selon qu'il est ouvert ou fermé.
 
 ## Goals / Non-Goals
 
@@ -12,7 +12,7 @@ Les trois types de marqueurs n'ont pas la même logique de présence sur la cart
 - Mise à jour automatique quand le rider se déplace (debounce 500ms)
 - Filtres persistants entre sessions
 - Tap sur marqueur → bottom sheet avec aperçu (nom, statut, distance, places)
-- Events limités à une fenêtre de 2 semaines, avec distinction visuelle "en cours" (couleur active) vs "à venir" (couleur atténuée)
+- Events et sessions limités à une fenêtre de 2 semaines, avec distinction visuelle "en cours" (couleur active) vs "à venir" (couleur atténuée)
 - Magasins toujours affichés (pas de fenêtre temporelle), colorés ouvert/fermé, icône selon leur type de commerce (voir shop-core)
 
 **Non-Goals:**
@@ -34,8 +34,8 @@ Les trois types de marqueurs n'ont pas la même logique de présence sur la cart
 **Clustering différé**
 → Pas de clustering au MVP. Si plus de 50 marqueurs dans le viewport → afficher les 50 plus proches uniquement.
 
-**Fenêtre de 2 semaines pour les events, avec distinction actif/à venir**
-→ `GET /map/pins` ne retourne que les events dont `starts_at` est entre maintenant et J+14. Un event dont l'heure actuelle est comprise entre `starts_at` et `ends_at` est "en cours" (couleur active) ; sinon il est "à venir" (couleur atténuée). Un event terminé (`ends_at` dépassé) sort du résultat. Ce filtrage est propre à la carte — le feed d'events (events-core) a sa propre logique d'affichage, pas nécessairement limitée à 14 jours.
+**Fenêtre de 2 semaines pour les events et les sessions, avec distinction actif/à venir**
+→ `GET /map/pins` ne retourne que les events et sessions dont `starts_at` est entre maintenant et J+14. Un event est "en cours" entre `starts_at` et `ends_at` ; une session (qui n'a pas de champ `ends_at` saisi, voir sessions-core) est "en cours" entre `starts_at` et `starts_at + 3h` (durée par défaut). Sinon l'élément est "à venir" (couleur atténuée). Un élément terminé sort du résultat. Ce filtrage est propre à la carte — le feed d'events (events-core) a sa propre logique d'affichage, pas nécessairement limitée à 14 jours ; les sessions n'ont pas de feed swipable au MVP, seulement la carte et la page du spot.
 
 **Magasins toujours affichés, colorés par statut**
 → Contrairement aux spots (statut manuel du gestionnaire) et aux events (fenêtre de date), un magasin est présent sur la carte en permanence dès lors qu'il est validé. Seule sa couleur change, calculée à la volée depuis ses horaires d'ouverture et une éventuelle fermeture exceptionnelle (voir shop-core). L'icône du marqueur reflète son type de commerce.

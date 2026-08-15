@@ -5,16 +5,16 @@ La carte est l'écran central de MeetNShred. C'est le premier écran que voit un
 ## What Changes
 
 - Carte Google Maps en thème monochrome sombre centrée sur la position du rider
-- Affichage des terrains avec badges de statut colorés
-- Affichage des events limités aux 2 prochaines semaines, avec une couleur différente pour un event en cours (actif) et un event pas encore commencé (à venir)
+- Affichage des terrains avec badges de statut colorés (spots privés uniquement)
+- Affichage des events et des sessions limités aux 2 prochaines semaines, avec une couleur différente pour un élément en cours (actif) et un élément pas encore commencé (à venir)
 - Affichage des magasins, toujours visibles (pas de fenêtre de temps), colorés selon leur statut ouvert/fermé (voir shop-core)
-- Filtres par type (Spots, Events, Magasins) et par distance
+- Filtres par type (Spots, Events, Sessions, Magasins) et par distance
 - Tap sur un marqueur → aperçu rapide → navigation vers la fiche complète
 
 ## Capabilities
 
 ### New Capabilities
-- `map-core`: Carte principale Google Maps avec marqueurs terrains/events/magasins, filtres, géolocalisation temps réel du rider
+- `map-core`: Carte principale Google Maps avec marqueurs terrains/events/sessions/magasins, filtres, géolocalisation temps réel du rider
 
 ### Modified Capabilities
 <!-- aucune -->
@@ -24,4 +24,5 @@ La carte est l'écran central de MeetNShred. C'est le premier écran que voit un
 - Intégration Google Maps API (clé API requise)
 - Endpoint géospatial pour récupérer les entités dans un rayon
 - Dépend de `shop-core` pour les données magasin (statut ouvert/fermé, type de commerce)
+- Dépend de `sessions-core` pour les données session (spot lié, créneau actif/à venir)
 - Performance critique — requêtes spatiales optimisées
