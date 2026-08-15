@@ -43,20 +43,20 @@ Le système SHALL permettre l'inscription et la connexion via Apple Sign-In (obl
 
 ---
 
-### Requirement: Géolocalisation obligatoire à l'onboarding
-Le système SHALL demander la permission de géolocalisation à la fin du flux d'inscription. Sans cette permission, l'accès à l'application SHALL être bloqué.
+### Requirement: Géolocalisation demandée à l'onboarding, non bloquante
+Le système SHALL demander la permission de géolocalisation à la fin du flux d'inscription. Cette permission SHALL rester facultative : un refus ne SHALL pas bloquer l'accès à l'application. Correction d'une incohérence : cette exigence disait auparavant l'accès bloquant sans géolocalisation, ce qui contredisait CLAUDE.md et map-core (mode recherche par lieu prévu en cas de refus).
 
 #### Scenario: Permission accordée
 - **WHEN** le rider accorde la permission de géolocalisation
-- **THEN** le système stocke la position initiale et redirige vers la carte principale
+- **THEN** le système stocke la position initiale et redirige vers la carte principale, centrée sur cette position
 
 #### Scenario: Permission refusée
 - **WHEN** le rider refuse la permission de géolocalisation
-- **THEN** le système affiche un écran bloquant expliquant que la géolocalisation est nécessaire, avec un bouton "Ouvrir les paramètres"
+- **THEN** le système redirige quand même vers la carte principale, avec un champ de recherche par lieu affiché en premier plan à la place du centrage automatique (voir map-core)
 
-#### Scenario: Permission refusée puis accordée
-- **WHEN** le rider ouvre les paramètres et active la géolocalisation
-- **THEN** le système détecte le changement et débloque l'accès à la carte
+#### Scenario: Permission refusée puis accordée plus tard
+- **WHEN** le rider active la géolocalisation depuis les paramètres après avoir initialement refusé
+- **THEN** le système détecte le changement et recentre automatiquement la carte sur sa position
 
 ---
 
