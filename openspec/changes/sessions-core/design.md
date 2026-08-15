@@ -14,6 +14,7 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 - Pas de capacité, pas de paiement, pas de validation — mécanisme volontairement léger
 - Visible sur la carte dans la fenêtre de 2 semaines, avec la distinction "en cours" / "à venir" déjà utilisée pour les events
 - Fil de sessions swipable, sur le même principe que le fil d'events (voir navigation-core pour son intégration dans l'app)
+- Le créateur peut annuler sa session explicitement, avec notification aux participants
 
 **Non-Goals:**
 - Capacité ou limite de participants sur une session
@@ -44,11 +45,14 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 **Pas de champ "heure de fin" saisi par le créateur**
 → Pour garder la création aussi rapide qu'un event social ride, le rider ne saisit qu'une heure de début (`starts_at`), pas d'heure de fin. Une session est considérée "en cours" entre `starts_at` et `starts_at + 3h` (durée par défaut fixe), "à venir" avant, et sort de la carte après. Ce n'est qu'un calcul d'affichage, pas une contrainte sur la session elle-même — elle reste rejoignable au-delà si sa page est consultée directement.
 
+**Annulation explicite plutôt que disparition silencieuse**
+→ Une session a un `status` (`active` / `cancelled`). Le créateur peut l'annuler à tout moment tant qu'elle est encore visible (dans la fenêtre de 2 semaines) ; ses participants sont notifiés (nouveau trigger dans notifications-push). Ça évite qu'un rider arrive sur place pour rien parce que le créateur a changé d'avis sans prévenir — l'ancienne approche ("elle disparaît juste après sa fenêtre") ne couvrait pas ce cas, seulement l'oubli passif.
+
 ## Risks / Trade-offs
 
 - [Confusion session / inscription payante] Un rider pourrait croire que rejoindre une session sur un spot privé suffit à réserver sa place → message explicite sur l'écran de session
 - [Spam de sessions] Pas de limite de création côté produit → rate limiting basique + signalement communautaire, cohérent avec ce qui existe pour les events
-- [Sessions fantômes] Une session créée puis personne ne vient → pas de confirmation/annulation formelle au MVP ; la fenêtre de 2 semaines la fait disparaître naturellement une fois passée
+- [Annulation tardive] Un créateur annule au dernier moment → la notification est immédiate, mais rien n'empêche une annulation la minute précédant le début
 
 ## Open Questions
 

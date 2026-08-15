@@ -78,3 +78,20 @@ Le système SHALL exposer le détail d'une session : spot lié, créateur, date/
 #### Scenario: Consultation d'une session sur spot privé
 - **WHEN** un rider consulte une session liée à un spot privé qui exige une inscription payante
 - **THEN** la page affiche un rappel explicite ("Rejoindre cette session ne réserve pas ta place — pense à t'inscrire sur le spot si nécessaire") en plus du bouton rejoindre
+
+---
+
+### Requirement: Annulation d'une session par son créateur
+Le système SHALL permettre au créateur d'une session de l'annuler à tout moment tant qu'elle est encore visible (dans la fenêtre de 2 semaines). Une fois annulée, la session SHALL disparaître immédiatement de la carte et du fil de sessions. Les participants SHALL recevoir une notification (voir notifications-push).
+
+#### Scenario: Annulation par le créateur
+- **WHEN** le créateur d'une session l'annule depuis sa page
+- **THEN** la session passe au statut "annulée", disparaît de la carte et du fil, et sa page affiche "Session annulée" plutôt que le bouton rejoindre
+
+#### Scenario: Notification aux participants
+- **WHEN** une session avec des participants est annulée par son créateur
+- **THEN** chaque participant reçoit une notification push l'informant de l'annulation
+
+#### Scenario: Tentative d'annulation par un rider autre que le créateur
+- **WHEN** un participant qui n'est pas le créateur tente d'annuler la session
+- **THEN** le système retourne une erreur 403
