@@ -6,10 +6,11 @@
 - [ ] 1.4 Index sur `push_tokens.rider_id` et `spot_follows.spot_id`
 - [ ] 1.5 `rider_follows` est créée par rider-social — vérifier qu'elle existe avant d'activer le trigger 6.5/6.6
 - [ ] 1.6 Créer la table `notification_preferences` (rider_id, notification_type, enabled) avec contrainte UNIQUE (rider_id, notification_type) — absence de ligne = activé par défaut
+- [ ] 1.7 Ajouter un flag ou une table `reminder_sent` (target_type [event/session], target_id, rider_id) pour éviter les doublons de rappel entre deux exécutions du job
 
 ## 2. Config types de notifications
 
-- [ ] 2.1 Créer le fichier `configs/notification-types.json` avec les 6 types MVP (slug, label `{ fr, en, es }`, template)
+- [ ] 2.1 Créer le fichier `configs/notification-types.json` avec les 7 types MVP (slug, label `{ fr, en, es }`, template)
 - [ ] 2.2 Utilitaire `getNotificationType(slug, lang)` — charge la config + résout la langue + interpole les variables
 
 ## 3. API — Tokens push et préférences
@@ -41,6 +42,7 @@
 - [ ] 6.6 Trigger : annulation d'un event créé par un rider suivi → notif followers du rider
 - [ ] 6.7 Trigger depuis rider-social : envoi d'un message direct → notif au destinataire
 - [ ] 6.8 Trigger depuis sessions-core : annulation d'une session → notif aux participants
+- [ ] 6.9 Job planifié (toutes les 5 minutes) : sélectionne les events/sessions dont `starts_at` tombe dans les 25-35 prochaines minutes, non annulés, envoie le rappel à chaque inscrit/participant sans doublon
 
 ## 7. Mobile
 

@@ -100,6 +100,27 @@ Le système SHALL envoyer une notification push à tous les participants d'une s
 
 ---
 
+### Requirement: Rappel avant le début d'un event ou d'une session
+Le système SHALL envoyer une notification de rappel à chaque rider inscrit à un event ou participant à une session environ 30 minutes avant son heure de début. Un event ou une session annulé entre-temps ne SHALL générer aucun rappel.
+
+#### Scenario: Rappel avant un event
+- **WHEN** il reste environ 30 minutes avant le début d'un event auquel un rider est inscrit
+- **THEN** ce rider reçoit une notification "Ton event [titre] commence dans 30 minutes"
+
+#### Scenario: Rappel avant une session
+- **WHEN** il reste environ 30 minutes avant le début d'une session qu'un rider a rejointe
+- **THEN** ce rider reçoit une notification "Ta session sur [spot] commence dans 30 minutes"
+
+#### Scenario: Pas de rappel après annulation
+- **WHEN** un event ou une session est annulé avant d'atteindre la fenêtre des 30 minutes
+- **THEN** aucun rappel n'est envoyé, seule la notification d'annulation l'a été
+
+#### Scenario: Chevauchement — deux rappels distincts
+- **WHEN** un rider a deux engagements qui se chevauchent et dont les 30 minutes avant le début tombent au même moment
+- **THEN** il reçoit un rappel pour chacun, indépendamment l'un de l'autre — le rappel n'arbitre pas le conflit, il informe seulement (voir events-core, sessions-core pour l'avertissement de chevauchement affiché au moment de l'inscription)
+
+---
+
 ### Requirement: Types de notifications extensibles via config
 Le système SHALL charger les types de notifications disponibles depuis une config (`configs/notification-types.json`), avec pour chaque type : slug, label multilingue `{ fr, en, es }`, template de message. Le super admin SHALL pouvoir ajouter un type sans modification de code.
 
