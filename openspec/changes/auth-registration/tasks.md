@@ -1,6 +1,6 @@
 ## 1. Base de données
 
-- [ ] 1.1 Créer la table `users` (id, first_name, last_name, dob, email, password_hash, auth_provider, provider_id, geolocation_granted, created_at)
+- [ ] 1.1 Créer la table `users` (id, first_name, last_name, dob, email, password_hash, auth_provider, provider_id, geolocation_granted, terms_accepted_at, terms_version, deleted_at nullable, created_at)
 - [ ] 1.2 Créer la table `refresh_tokens` (id, user_id, token_hash, expires_at, revoked_at)
 - [ ] 1.3 Ajouter les index sur `users.email` et `refresh_tokens.token_hash`
 
@@ -47,3 +47,13 @@
 - [ ] 7.1 Stockage du refresh token dans Keychain (iOS) / Keystore (Android)
 - [ ] 7.2 Renouvellement silencieux de l'access token au démarrage de l'app
 - [ ] 7.3 Intercepteur HTTP : auto-refresh si 401 `TOKEN_EXPIRED`, logout si refresh invalide
+
+## 8. RGPD — Consentement, suppression, export
+
+- [ ] 8.1 Case à cocher consentement CGU/politique de confidentialité sur l'écran d'inscription (email et SSO), non pré-cochée, bloquante
+- [ ] 8.2 Écran de re-consentement si `terms_version` du compte est inférieure à la version courante, affiché avant tout autre écran
+- [ ] 8.3 `DELETE /users/me` — suppression de compte : anonymise les champs identifiants, révoque les refresh tokens, réattribue messages/avis à un compte "Utilisateur supprimé", passe les spots/magasins gérés en orphelins
+- [ ] 8.4 Écran de suppression de compte avec confirmation explicite (ex : retaper "SUPPRIMER")
+- [ ] 8.5 `POST /users/me/export` — déclenche la compilation asynchrone d'un export des données personnelles, envoi du lien par email
+- [ ] 8.6 Écran "Exporter mes données" dans les réglages, avec confirmation de la demande
+- [ ] 8.7 Rédaction et hébergement des CGU et de la politique de confidentialité (contenu juridique, hors périmètre technique)

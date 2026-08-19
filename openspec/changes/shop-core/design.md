@@ -51,6 +51,12 @@ Le "magasin" au sens de MeetNShred dépasse le commerce d'équipement sportif : 
 **Fermeture exceptionnelle**
 → En plus des horaires réguliers, le gestionnaire peut déclarer une période de fermeture exceptionnelle (vacances, rupture de stock, travaux...) via une plage de dates avec un motif optionnel. Tant qu'une fermeture exceptionnelle est active, le statut affiché est "Fermé exceptionnellement" et prime sur les horaires réguliers, même sur un créneau normalement ouvert.
 
+**Site web et réseaux sociaux facultatifs**
+→ Deux champs simples : une URL de site web, une liste de liens réseaux sociaux (label + URL, structure libre plutôt qu'une liste figée de plateformes — un magasin peut avoir Instagram et Facebook, un autre juste TikTok). Aucun des deux n'est requis pour publier une fiche.
+
+**Partage et statistiques, mêmes principes que pour les spots**
+→ Partage via deep link, identique au mécanisme déjà spécifié pour les events (voir events-core) et les spots (voir spot-core). Statistiques minimales (vues 30 jours, events créés, followers) sur le même principe que spot-core — signal d'activité basique, pas de tableau de bord avancé au MVP.
+
 ## Risks / Trade-offs
 
 - [Confusion spot vs magasin] Un rider pourrait confondre un magasin avec un lieu rideable → icône de marqueur clairement différente sur la carte, libellé explicite sur la fiche

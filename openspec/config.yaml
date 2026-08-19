@@ -58,10 +58,16 @@ context: |
   - Cartes : Google Maps API. Push : FCM (Android) + APNs (iOS). i18n : i18next.
 
   ## Périmètre
-  - **MVP** : auth-registration, rider-profile, spot-core, events-core,
-    map-core, i18n-core, notifications-push (7 types, préférences par type
-    incluses), backoffice-spot, rider-social (suivi libre entre riders, fil
-    d'activité, messagerie directe), shop-core.
+  - **MVP** : auth-registration (avec RGPD : consentement, suppression de
+    compte, export des données), rider-profile, spot-core (spots privés et
+    publics), events-core, map-core, i18n-core, notifications-push (7 types,
+    préférences par type incluses), backoffice-spot, rider-social (suivi
+    libre entre riders, fil d'activité, messagerie directe), shop-core,
+    sessions-core (sessions de ride créées librement par un rider, liées à
+    un spot privé ou public, sans rôle ni capacité ni paiement),
+    navigation-core (structure de navigation principale de l'app),
+    reviews-core (avis sur spots/magasins/events), moderation-core
+    (signalement de contenu).
   - **Phase 2** : calendrier d'ouvertures récurrentes.
   - **Phase 3** : paiement natif intégré, 2FA, messagerie gestionnaire↔rider.
 

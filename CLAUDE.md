@@ -87,16 +87,20 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 
 | Change | Statut | Description |
 |---|---|---|
-| `auth-registration` | Specs complètes | Inscription email/mdp + Google + Apple SSO, JWT, géolocalisation onboarding |
+| `auth-registration` | Specs complètes | Inscription email/mdp + Google + Apple SSO, JWT, géolocalisation onboarding (non bloquante), RGPD (consentement, suppression, export) |
 | `rider-profile` | Specs complètes | Profil, disciplines, fiches matériel JSONB, upload photos |
-| `spot-core` | Specs complètes | Entité spot multi-disciplines, statuts en config, inscriptions, paiement externe |
-| `events-core` | Specs complètes | Events, swipe, feed filtré par discipline et distance |
-| `map-core` | Specs complètes | Carte Google Maps principale, marqueurs, filtres |
+| `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement) ou public (gratuit), statuts en config, inscriptions, paiement externe |
+| `events-core` | Specs complètes | Events (spot_opening, track_day, competition, shop_event — tous réservés à un rôle), swipe, feed filtré |
+| `sessions-core` | Specs complètes | Sessions de ride créées librement par un rider, liées à un spot privé ou public, rejoignables par d'autres riders, fil swipable |
+| `navigation-core` | Specs complètes | Barre de navigation (Carte/Fil/Créer/Messages/Profil), fil combiné events+sessions, hub de création par rôle |
+| `map-core` | Specs complètes | Carte Google Maps principale, marqueurs spots/events/sessions/magasins, filtres |
 | `i18n-core` | Specs complètes | FR/EN/ES, préférence utilisateur, middleware langue |
 | `notifications-push` | Specs complètes | FCM + APNs, tokens push, 7 types de notifications (dont rappel 30 min), suivi spot, préférences par type |
 | `backoffice-spot` | Non démarré | Interface gestionnaire de spot |
 | `rider-social` | Specs complètes | Suivi libre entre riders, fil d'activité, messagerie directe (DM texte 1:1) |
-| `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte |
+| `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte, stats, partage |
+| `reviews-core` | Specs complètes | Avis (note + commentaire) sur spots, magasins, events, avec preuve de participation pour spot/event |
+| `moderation-core` | Specs complètes | Signalement de spot/magasin/event/avis, file de modération super admin |
 
 ---
 

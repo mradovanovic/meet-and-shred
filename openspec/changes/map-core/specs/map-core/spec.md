@@ -51,6 +51,27 @@ Le système SHALL afficher les events dont la date de début est comprise entre 
 
 ---
 
+### Requirement: Marqueurs sessions
+Le système SHALL afficher les sessions dont la date de début est comprise entre maintenant et les 2 prochaines semaines (14 jours) comme des marqueurs distincts des spots, events et magasins (voir sessions-core). Une session en cours SHALL être affichée dans une couleur active ; une session à venir mais pas encore commencée SHALL être affichée dans une couleur atténuée — même logique que pour les events.
+
+#### Scenario: Session à venir
+- **WHEN** une session commence dans 3 jours
+- **THEN** son marqueur s'affiche dans la couleur "à venir", positionné sur le spot concerné
+
+#### Scenario: Session en cours
+- **WHEN** l'heure actuelle est comprise dans la plage d'une session
+- **THEN** son marqueur s'affiche dans la couleur "active"
+
+#### Scenario: Session hors fenêtre
+- **WHEN** une session commence dans plus de 2 semaines
+- **THEN** elle n'apparaît pas encore sur la carte
+
+#### Scenario: Tap sur un marqueur session
+- **WHEN** le rider tape sur un marqueur session
+- **THEN** une bottom sheet s'affiche avec : spot lié, créateur, date, nombre de participants, bouton "Rejoindre"
+
+---
+
 ### Requirement: Marqueurs magasins
 Le système SHALL afficher chaque magasin validé comme un marqueur visuellement distinct des spots et des events (voir shop-core), coloré selon son statut ouvert/fermé et portant l'icône de son type de commerce. Contrairement aux events, les magasins SHALL toujours être affichés sur la carte, sans filtre de fenêtre temporelle.
 
@@ -82,7 +103,7 @@ Le système SHALL regrouper les marqueurs proches en un cluster affichant le nom
 ---
 
 ### Requirement: Filtres discipline et type
-La carte SHALL s'ouvrir pré-filtrée sur les disciplines du rider. Le rider SHALL pouvoir modifier les filtres par type (Spots, Events, Magasins) et par discipline (ses disciplines par défaut, toggle "Toutes"). Les magasins sans discipline associée (ex : bar, restaurant) SHALL rester visibles quel que soit le filtre discipline actif, tant que le type "Magasins" est activé. Les filtres SHALL persister entre les sessions.
+La carte SHALL s'ouvrir pré-filtrée sur les disciplines du rider. Le rider SHALL pouvoir modifier les filtres par type (Spots, Events, Sessions, Magasins) et par discipline (ses disciplines par défaut, toggle "Toutes"). Les magasins sans discipline associée (ex : bar, restaurant) SHALL rester visibles quel que soit le filtre discipline actif, tant que le type "Magasins" est activé. Les filtres SHALL persister entre les sessions de l'utilisateur (à ne pas confondre avec les sessions de ride affichées sur la carte).
 
 #### Scenario: Ouverture pré-filtrée
 - **WHEN** un rider pratiquant MX et Kite ouvre la carte
@@ -119,5 +140,5 @@ Le système SHALL charger uniquement les marqueurs visibles dans le viewport cou
 - **THEN** les nouveaux marqueurs de cette zone sont chargés après 500ms
 
 #### Scenario: Zone sans contenu
-- **WHEN** aucun spot, event ou magasin ne correspond aux filtres actifs dans la zone visible
+- **WHEN** aucun spot, event, session ou magasin ne correspond aux filtres actifs dans la zone visible
 - **THEN** le système affiche "Rien dans cette zone — essaie d'élargir tes filtres ou de zoomer"

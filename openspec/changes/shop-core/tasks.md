@@ -1,6 +1,8 @@
 ## 1. Base de données
 
-- [ ] 1.1 Créer la table `shops` (id, name, shop_type_id, description, lat, lng, address, city, country, owner_id, status [pending/published], created_at)
+- [ ] 1.1 Créer la table `shops` (id, name, shop_type_id, description, lat, lng, address, city, country, owner_id, status [pending/published], website_url nullable, created_at)
+- [ ] 1.1b Créer la table `shop_social_links` (id, shop_id, label, url) — liens réseaux sociaux, structure libre
+- [ ] 1.1c Créer la table `shop_views` (shop_id, day, count) — compteur de vues agrégé par jour
 - [ ] 1.2 Créer la table `shop_types` (id, slug, label) — liste ouverte, seed initial : magasin_sport, bar, restaurant
 - [ ] 1.3 Créer la table `shop_disciplines` (shop_id, discipline_id, is_primary) — liaison N:N, facultative
 - [ ] 1.4 Créer la table `shop_photos` (id, shop_id, url, position)
@@ -13,8 +15,9 @@
 ## 2. API magasins — Publique
 
 - [ ] 2.1 `GET /shops` — liste paginée avec filtres (type de commerce, discipline, marque, lat, lng, radius)
-- [ ] 2.2 `GET /shops/:id` — détail d'un magasin avec statut ouvert/fermé calculé, horaires, marques
+- [ ] 2.2 `GET /shops/:id` — détail d'un magasin avec statut ouvert/fermé calculé, horaires, marques, site web, réseaux sociaux ; incrémente `shop_views` du jour à chaque consultation
 - [ ] 2.3 `GET /shops/nearby` — magasins dans un rayon GPS
+- [ ] 2.4 `GET /shops/:id/share` — génération du deep link de partage (même principe que events-core)
 
 ## 3. API magasins — Gestionnaire
 
@@ -24,6 +27,8 @@
 - [ ] 3.4 `DELETE /shops/:id/photos/:photoId` — suppression photo
 - [ ] 3.5 `PUT /shops/:id/opening-hours` — édition des horaires d'ouverture
 - [ ] 3.6 `POST /shops/:id/closures` / `DELETE /shops/:id/closures/:closureId` — déclarer/annuler une fermeture exceptionnelle
+- [ ] 3.7 `PUT /shops/:id/social-links` — édition des liens réseaux sociaux
+- [ ] 3.8 `GET /shops/:id/stats` — vues des 30 derniers jours, events créés, followers (gestionnaire uniquement)
 
 ## 4. API marques et types de commerce
 
@@ -49,7 +54,8 @@
 
 ## 8. Mobile
 
-- [ ] 8.1 Fiche magasin publique (type de commerce, horaires, marques, disciplines, photos, statut ouvert/fermé, bouton "Créer un event")
-- [ ] 8.2 Écran gestionnaire : édition fiche (type de commerce, horaires, marques, disciplines, photos, fermeture exceptionnelle)
+- [ ] 8.1 Fiche magasin publique (type de commerce, horaires, marques, disciplines, photos, statut ouvert/fermé, site web, réseaux sociaux, bouton "Créer un event", bouton "Partager")
+- [ ] 8.2 Écran gestionnaire : édition fiche (type de commerce, horaires, marques, disciplines, photos, fermeture exceptionnelle, site web, réseaux sociaux)
 - [ ] 8.3 Écran de soumission d'une nouvelle fiche magasin (commerçant), avec sélection du type de commerce
 - [ ] 8.4 Écran super admin : validation des fiches en attente, transfert de gestion, gestion de la liste des types de commerce
+- [ ] 8.5 Onglet statistiques dans le back-office (vues 30 jours, events créés, followers)
