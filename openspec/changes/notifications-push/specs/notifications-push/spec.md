@@ -30,19 +30,6 @@ Le système SHALL permettre à un rider connecté de suivre ou ne plus suivre un
 
 ---
 
-### Requirement: Suivi d'un rider
-Le système SHALL permettre à un rider connecté de suivre ou ne plus suivre un autre rider. Le nombre de followers SHALL être exposé sur le profil public du rider suivi (voir rider-profile).
-
-#### Scenario: Suivre un rider
-- **WHEN** un rider tape "Suivre" sur le profil d'un autre rider
-- **THEN** le système enregistre l'abonnement et incrémente le compteur de followers du rider suivi
-
-#### Scenario: Ne plus suivre un rider
-- **WHEN** un rider tape "Ne plus suivre" sur un rider déjà suivi
-- **THEN** le système supprime l'abonnement et décrémente le compteur de followers
-
----
-
 ### Requirement: Notification à l'ouverture d'un spot suivi
 Le système SHALL envoyer une notification push à tous les followers d'un spot quand celui-ci passe d'un statut fermé à un statut ouvert (`open`). Le contenu SHALL être localisé dans la langue de chaque destinataire (voir i18n-core).
 
@@ -83,7 +70,7 @@ Le système SHALL envoyer une notification push à tous les riders inscrits quan
 ---
 
 ### Requirement: Notification lors d'une création ou annulation d'event par un rider suivi
-Le système SHALL envoyer une notification push aux followers d'un rider quand celui-ci crée un event ou annule un event qu'il avait créé.
+Le système SHALL envoyer une notification push aux followers d'un rider quand celui-ci crée un event ou annule un event qu'il avait créé. La relation de suivi entre riders SHALL être celle définie dans rider-social (voir rider-social, capability rider-follow).
 
 #### Scenario: Rider suivi crée un event
 - **WHEN** un rider suivi crée un nouvel event
@@ -95,12 +82,68 @@ Le système SHALL envoyer une notification push aux followers d'un rider quand c
 
 ---
 
+### Requirement: Notification de nouveau message direct
+Le système SHALL envoyer une notification push au destinataire d'un message direct quand celui-ci est envoyé (voir rider-social, capability direct-messages).
+
+#### Scenario: Nouveau message reçu
+- **WHEN** un rider envoie un message direct à un autre rider
+- **THEN** le destinataire reçoit une notification push avec un aperçu du message, dans sa langue
+
+---
+
+### Requirement: Notification d'annulation d'une session
+Le système SHALL envoyer une notification push à tous les participants d'une session quand son créateur l'annule (voir sessions-core).
+
+#### Scenario: Session annulée
+- **WHEN** le créateur d'une session l'annule
+- **THEN** chaque participant reçoit une notification push l'informant de l'annulation
+
+---
+
+### Requirement: Rappel avant le début d'un event ou d'une session
+Le système SHALL envoyer une notification de rappel à chaque rider inscrit à un event ou participant à une session environ 30 minutes avant son heure de début. Un event ou une session annulé entre-temps ne SHALL générer aucun rappel.
+
+#### Scenario: Rappel avant un event
+- **WHEN** il reste environ 30 minutes avant le début d'un event auquel un rider est inscrit
+- **THEN** ce rider reçoit une notification "Ton event [titre] commence dans 30 minutes"
+
+#### Scenario: Rappel avant une session
+- **WHEN** il reste environ 30 minutes avant le début d'une session qu'un rider a rejointe
+- **THEN** ce rider reçoit une notification "Ta session sur [spot] commence dans 30 minutes"
+
+#### Scenario: Pas de rappel après annulation
+- **WHEN** un event ou une session est annulé avant d'atteindre la fenêtre des 30 minutes
+- **THEN** aucun rappel n'est envoyé, seule la notification d'annulation l'a été
+
+#### Scenario: Chevauchement — deux rappels distincts
+- **WHEN** un rider a deux engagements qui se chevauchent et dont les 30 minutes avant le début tombent au même moment
+- **THEN** il reçoit un rappel pour chacun, indépendamment l'un de l'autre — le rappel n'arbitre pas le conflit, il informe seulement (voir events-core, sessions-core pour l'avertissement de chevauchement affiché au moment de l'inscription)
+
+---
+
 ### Requirement: Types de notifications extensibles via config
 Le système SHALL charger les types de notifications disponibles depuis une config (`configs/notification-types.json`), avec pour chaque type : slug, label multilingue `{ fr, en, es }`, template de message. Le super admin SHALL pouvoir ajouter un type sans modification de code.
 
-#### Scenario: Chargement des 4 types MVP
+#### Scenario: Chargement des types MVP
 - **WHEN** le système résout le type de notification à envoyer pour une ouverture de spot
 - **THEN** il utilise le slug, le label et le template définis dans `configs/notification-types.json`
+
+---
+
+### Requirement: Préférences de notification par type
+Le système SHALL permettre à un rider de désactiver individuellement chaque type de notification depuis les réglages, sans affecter les autres types. Par défaut, tous les types SHALL être activés pour un nouveau rider. Un type désactivé ne SHALL générer aucun envoi, même si les conditions du trigger sont remplies.
+
+#### Scenario: Désactivation d'un type
+- **WHEN** un rider désactive les notifications "Places limitées sur un spot suivi" dans ses réglages
+- **THEN** il ne reçoit plus ce type de notification, mais continue de recevoir les autres types normalement
+
+#### Scenario: Notification non envoyée pour un type désactivé
+- **WHEN** un spot suivi par un rider passe sous 20% de places restantes, mais que ce rider a désactivé ce type de notification
+- **THEN** le système n'envoie aucune notification à ce rider pour cet événement (les autres followers du spot, eux, la reçoivent normalement)
+
+#### Scenario: Réactivation
+- **WHEN** un rider réactive un type de notification précédemment désactivé
+- **THEN** il recommence à recevoir ce type dès le prochain déclencheur
 
 ---
 
