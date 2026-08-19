@@ -1,17 +1,18 @@
 ## 1. Base de données
 
-- [ ] 1.1 Créer la table `shops` (id, name, description, lat, lng, address, city, country, owner_id, status [pending/published], created_at)
-- [ ] 1.2 Créer la table `shop_disciplines` (shop_id, discipline_id, is_primary) — liaison N:N
-- [ ] 1.3 Créer la table `shop_photos` (id, shop_id, url, position)
-- [ ] 1.4 Créer la table `brands` (id, name, logo_url) — liste ouverte
-- [ ] 1.5 Créer la table `shop_brands` (shop_id, brand_id) — liaison N:N
-- [ ] 1.6 Créer la table `shop_opening_hours` (id, shop_id, day_of_week, opens_at, closes_at)
-- [ ] 1.7 Créer la table `shop_closures` (id, shop_id, start_date, end_date, reason)
-- [ ] 1.8 Index géospatial sur `shops.(lat, lng)`
+- [ ] 1.1 Créer la table `shops` (id, name, shop_type_id, description, lat, lng, address, city, country, owner_id, status [pending/published], created_at)
+- [ ] 1.2 Créer la table `shop_types` (id, slug, label) — liste ouverte, seed initial : magasin_sport, bar, restaurant
+- [ ] 1.3 Créer la table `shop_disciplines` (shop_id, discipline_id, is_primary) — liaison N:N, facultative
+- [ ] 1.4 Créer la table `shop_photos` (id, shop_id, url, position)
+- [ ] 1.5 Créer la table `brands` (id, name, logo_url) — liste ouverte
+- [ ] 1.6 Créer la table `shop_brands` (shop_id, brand_id) — liaison N:N, facultative
+- [ ] 1.7 Créer la table `shop_opening_hours` (id, shop_id, day_of_week, opens_at, closes_at)
+- [ ] 1.8 Créer la table `shop_closures` (id, shop_id, start_date, end_date, reason)
+- [ ] 1.9 Index géospatial sur `shops.(lat, lng)`
 
 ## 2. API magasins — Publique
 
-- [ ] 2.1 `GET /shops` — liste paginée avec filtres (discipline, marque, lat, lng, radius)
+- [ ] 2.1 `GET /shops` — liste paginée avec filtres (type de commerce, discipline, marque, lat, lng, radius)
 - [ ] 2.2 `GET /shops/:id` — détail d'un magasin avec statut ouvert/fermé calculé, horaires, marques
 - [ ] 2.3 `GET /shops/nearby` — magasins dans un rayon GPS
 
@@ -24,10 +25,12 @@
 - [ ] 3.5 `PUT /shops/:id/opening-hours` — édition des horaires d'ouverture
 - [ ] 3.6 `POST /shops/:id/closures` / `DELETE /shops/:id/closures/:closureId` — déclarer/annuler une fermeture exceptionnelle
 
-## 4. API marques
+## 4. API marques et types de commerce
 
 - [ ] 4.1 `GET /brands` — liste des marques existantes (autocomplete)
 - [ ] 4.2 `POST /brands` — création d'une nouvelle marque si absente de la liste
+- [ ] 4.3 `GET /shop-types` — liste des types de commerce disponibles
+- [ ] 4.4 `POST /shop-types` — création d'un nouveau type (super admin uniquement)
 
 ## 5. API validation et transfert (super admin)
 
@@ -41,12 +44,12 @@
 
 ## 7. Intégration carte
 
-- [ ] 7.1 Ajouter les magasins comme nouveau type de marqueur sur la carte principale (voir map-core)
-- [ ] 7.2 Filtre carte dédié "Magasins"
+- [ ] 7.1 Ajouter les magasins comme nouveau type de marqueur sur la carte principale, toujours affiché (pas de fenêtre temporelle), coloré ouvert/fermé, icône selon le type de commerce (voir map-core)
+- [ ] 7.2 Filtre carte dédié "Magasins", avec sous-filtre par type de commerce
 
 ## 8. Mobile
 
-- [ ] 8.1 Fiche magasin publique (horaires, marques, disciplines, photos, statut ouvert/fermé, bouton "Créer un event")
-- [ ] 8.2 Écran gestionnaire : édition fiche, horaires, marques, photos, fermeture exceptionnelle
-- [ ] 8.3 Écran de soumission d'une nouvelle fiche magasin (commerçant)
-- [ ] 8.4 Écran super admin : validation des fiches en attente, transfert de gestion
+- [ ] 8.1 Fiche magasin publique (type de commerce, horaires, marques, disciplines, photos, statut ouvert/fermé, bouton "Créer un event")
+- [ ] 8.2 Écran gestionnaire : édition fiche (type de commerce, horaires, marques, disciplines, photos, fermeture exceptionnelle)
+- [ ] 8.3 Écran de soumission d'une nouvelle fiche magasin (commerçant), avec sélection du type de commerce
+- [ ] 8.4 Écran super admin : validation des fiches en attente, transfert de gestion, gestion de la liste des types de commerce
