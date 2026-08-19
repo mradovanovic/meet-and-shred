@@ -7,7 +7,7 @@ Le profil rider est le cœur de l'identité communautaire. MeetNShred est multi-
 **Goals:**
 - Profil complétable en moins de 2 minutes après inscription
 - Disciplines en liste dynamique (ajout sans migration de schéma)
-- Multi-sélection de disciplines par rider
+- Multi-sélection de disciplines par rider, plafonnée à 5, modifiable à tout moment
 - Upload jusqu'à 5 photos (la première est la photo de profil principale)
 - Profil consultable par n'importe quel rider connecté
 
@@ -19,7 +19,10 @@ Le profil rider est le cœur de l'identité communautaire. MeetNShred est multi-
 ## Decisions
 
 **Disciplines en table dédiée, pas en enum**
-→ `disciplines` table avec (id, slug, label, icon, category, equipment_schema JSONB). Un rider peut avoir N disciplines via `rider_disciplines`. Permet d'ajouter n'importe quelle nouvelle discipline sans migration de schéma.
+→ `disciplines` table avec (id, slug, label, icon, category, equipment_schema JSONB). Un rider peut avoir jusqu'à 5 disciplines via `rider_disciplines`. Permet d'ajouter n'importe quelle nouvelle discipline sans migration de schéma.
+
+**Plafond de 5 disciplines par rider**
+→ Limite volontaire côté produit : au-delà de 5, le rider perd le bénéfice d'un contenu vraiment ciblé (carte et feed d'events pré-filtrés sur ses disciplines, voir map-core et events-core). La limite est vérifiée à l'ajout (côté API, pas juste côté UI) et reste modifiable à tout moment — retirer une discipline libère une place. Ce plafond ne s'applique qu'aux riders ; il n'a pas d'équivalent pour les disciplines d'un spot ou d'un magasin, qui n'ont pas cette contrainte.
 
 **Schéma matériel par discipline via JSONB**
 → Chaque discipline définit son `equipment_schema` : liste de champs (slug, label, type, required). Exemples :
@@ -49,6 +52,7 @@ Les valeurs sont stockées dans `rider_equipment.fields` (JSONB). La terminologi
 - [Schéma matériel] Nouvelle discipline ajoutée sans schéma défini → Fallback sur un champ texte libre "Description du setup" si `equipment_schema` est vide
 - [Upload photos] Taille des fichiers → Limiter à 5 MB par photo, compression côté serveur avant stockage
 - [Disciplines] Liste trop longue en UI → Grouper par catégorie (Moto, Vélo, Eau, Snow, Urban)
+- [Plafond de 5] Un rider multi-pratiquant (ex : 7 sports différents) doit choisir → accepté comme contrainte produit assumée, pas un bug ; le toggle "Toutes les disciplines" sur la carte et le feed (voir map-core, events-core) reste le recours pour voir au-delà de ses 5 disciplines
 - [Profil incomplet] Rider qui saute l'onboarding → Autoriser mais afficher un nudge "Complète ton profil"
 
 ## Open Questions
