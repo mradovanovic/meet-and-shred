@@ -19,7 +19,7 @@ Langue de travail du projet : **français**. Specs, commits, discussions — tou
 | Couche | Choix |
 |---|---|
 | Mobile | React Native Expo (iOS + Android) |
-| Auth | JWT stateless + refresh token, Google OAuth 2.0, Apple Sign-In |
+| Auth | JWT stateless + refresh token, email, Google OAuth 2.0, Facebook, TikTok, Apple Sign-In |
 | API | REST (stack backend non finalisée — voir open questions dans les designs) |
 | Base de données | PostgreSQL (JSONB utilisé pour les schémas matériel et configs) |
 | Stockage photos | S3 ou Cloudflare R2 (URLs en base, fichiers en object storage) |
@@ -87,7 +87,7 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 
 | Change | Statut | Description |
 |---|---|---|
-| `auth-registration` | Specs complètes | Inscription email/mdp + Google + Apple SSO, JWT, géolocalisation onboarding (non bloquante), RGPD (consentement, suppression, export) |
+| `auth-registration` | Specs complètes | Écran d'accueil + message de bienvenue, connexion email/Google/Facebook/TikTok (+ Apple sur iOS), JWT, géolocalisation onboarding (non bloquante, expliquée), RGPD (consentement, âge 16 ans, suppression, export) |
 | `rider-profile` | Specs complètes | Profil, disciplines, fiches matériel JSONB, upload photos |
 | `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement) ou public (gratuit), statuts en config, inscriptions, paiement externe |
 | `events-core` | Specs complètes | Events (spot_opening, track_day, competition, shop_event — tous réservés à un rôle), swipe, feed filtré |

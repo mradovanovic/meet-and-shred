@@ -1,11 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Consentement aux CGU et à la politique de confidentialité
-Le système SHALL exiger l'acceptation explicite des CGU et de la politique de confidentialité avant la création d'un compte, quel que soit le mode d'inscription (email, Google, Apple). Cette acceptation SHALL être horodatée et versionnée.
+Le système SHALL exiger l'acceptation explicite des CGU et de la politique de confidentialité avant la création d'un compte, quel que soit le mode d'inscription (email, Google, Facebook, TikTok, Apple). Cette acceptation SHALL être horodatée et versionnée.
 
 #### Scenario: Inscription sans consentement
 - **WHEN** un rider tente de créer un compte sans cocher la case de consentement
 - **THEN** le système refuse la création du compte
+
+#### Scenario: Consentement après connexion via un service tiers
+- **WHEN** un nouveau rider s'authentifie via Google, Facebook, TikTok ou Apple
+- **THEN** un écran de consentement (CGU, politique de confidentialité, âge minimum) s'affiche avant toute création de compte ; s'il refuse, aucun compte n'est créé et les données reçues du fournisseur sont écartées
 
 #### Scenario: Consentement horodaté
 - **WHEN** un rider coche la case et crée son compte
@@ -14,6 +18,32 @@ Le système SHALL exiger l'acceptation explicite des CGU et de la politique de c
 #### Scenario: Mise à jour des CGU
 - **WHEN** les CGU sont mises à jour vers une nouvelle version après l'inscription d'un rider
 - **THEN** le système demande un nouveau consentement à sa prochaine connexion, avant de le laisser continuer
+
+---
+
+### Requirement: Âge minimum de 16 ans
+Le système SHALL exiger, pour toute création de compte quel que soit le mode d'inscription, la confirmation par une case à cocher non pré-cochée « J'ai 16 ans ou plus ». Sans cette confirmation, le compte ne SHALL pas être créé.
+
+#### Scenario: Âge non confirmé
+- **WHEN** un visiteur tente de créer un compte sans cocher la confirmation d'âge
+- **THEN** le système refuse la création du compte
+
+#### Scenario: Âge confirmé
+- **WHEN** un visiteur coche la confirmation d'âge et crée son compte
+- **THEN** le système enregistre la date de cette confirmation
+
+---
+
+### Requirement: Information claire sur l'usage de la position
+Le système SHALL informer le rider, avant toute demande de permission de géolocalisation, de la finalité de la collecte (carte centrée, distances, contenus autour de lui), de son caractère facultatif et de la possibilité de la retirer à tout moment. La position GPS du rider ne SHALL jamais être visible des autres riders et ne SHALL être utilisée que lorsque l'app est au premier plan.
+
+#### Scenario: Retrait de la permission
+- **WHEN** le rider désactive la géolocalisation dans les réglages de son téléphone
+- **THEN** l'app continue de fonctionner en mode recherche par lieu et n'utilise plus sa position
+
+#### Scenario: App en arrière-plan
+- **WHEN** l'app passe en arrière-plan
+- **THEN** aucune position n'est collectée
 
 ---
 

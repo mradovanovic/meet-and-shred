@@ -51,7 +51,7 @@ context: |
 
   ## Stack
   - Mobile : React Native Expo (iOS + Android).
-  - Auth : JWT stateless + refresh token, Google OAuth 2.0, Apple Sign-In.
+  - Auth : JWT stateless + refresh token, email, Google OAuth 2.0, Facebook, TikTok, Apple Sign-In.
   - API : REST (stack backend non finalisée — voir open questions des designs).
   - Base : PostgreSQL (JSONB pour schémas matériel et configs).
   - Stockage photos : S3 ou Cloudflare R2.
