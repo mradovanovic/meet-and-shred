@@ -67,7 +67,8 @@ context: |
     un spot privé ou public, sans rôle ni capacité ni paiement),
     navigation-core (structure de navigation principale de l'app),
     reviews-core (avis sur spots/magasins/events), moderation-core
-    (signalement de contenu).
+    (signalement de contenu), ux-review-v3 (retours UX associés, règles UI
+    transverses ux-guidelines).
   - **Phase 2** : calendrier d'ouvertures récurrentes.
   - **Phase 3** : paiement natif intégré, 2FA, messagerie gestionnaire↔rider.
 

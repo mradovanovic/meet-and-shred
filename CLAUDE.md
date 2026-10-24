@@ -101,6 +101,7 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 | `shop-core` | Specs complètes | Fiche magasin (vélo, moto, kite...), marques, horaires, events magasin, carte, stats, partage |
 | `reviews-core` | Specs complètes | Avis (note + commentaire) sur spots, magasins, events, avec preuve de participation pour spot/event |
 | `moderation-core` | Specs complètes | Signalement de spot/magasin/event/avis, file de modération super admin |
+| `ux-review-v3` | Specs complètes | Retours UX associés sur le prototype v2 : couleur + lettre par catégorie sur la carte (état porté par l'anneau), profil d'un autre rider (Suivre/Message, menu ⋯), « Ton matos », fil d'activité cliquable, règles UI natives (`ux-guidelines`) |
 
 ---
 
