@@ -41,20 +41,22 @@ context: |
     automatiquement au MVP. Langues : FR (défaut), EN, ES.
   - **Photos** : profil rider max 5 (la 1ère = principale) ; setup matériel max 3
     par fiche (la 1ère = cover). Limite 5 MB/photo, compression côté serveur
-    avant stockage. URLs en base, fichiers en object storage (S3 ou R2).
+    avant stockage. URLs en base, fichiers dans Supabase Storage.
 
   ## Rôles utilisateurs
   - `rider` — compte standard.
-  - `spot_manager` (nom TBD) — crée et gère des spots ; attribué par super admin.
+  - `spot_manager` — crée et gère des spots ; attribué par super admin.
   - `organisateur` — crée des sessions organisées sur les events.
   - `super_admin` — validation manuelle des spots, attribution des rôles.
 
-  ## Stack
-  - Mobile : React Native Expo (iOS + Android).
-  - Auth : JWT stateless + refresh token, email, Google OAuth 2.0, Facebook, TikTok, Apple Sign-In.
-  - API : REST (stack backend non finalisée — voir open questions des designs).
-  - Base : PostgreSQL (JSONB pour schémas matériel et configs).
-  - Stockage photos : S3 ou Cloudflare R2.
+  ## Stack (socle figé — voir docs/adr/0001-socle-technique-expo-supabase.md)
+  - Mobile : React Native Expo (iOS + Android), TypeScript.
+  - Backend : Supabase (tout-en-un) — pas de serveur maison.
+  - Auth : Supabase Auth — email, Google, Facebook, Apple (providers natifs),
+    TikTok (provider OIDC custom) ; JWT access 15 min + refresh rotatif.
+  - API / logique métier : PostgREST (auto) + Edge Functions (TypeScript).
+  - Base : Supabase PostgreSQL + PostGIS (JSONB pour schémas matériel et configs).
+  - Stockage photos : Supabase Storage.
   - Cartes : Google Maps API. Push : FCM (Android) + APNs (iOS). i18n : i18next.
 
   ## Périmètre
