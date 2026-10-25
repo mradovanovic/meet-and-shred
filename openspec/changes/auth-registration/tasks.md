@@ -1,49 +1,52 @@
-## 1. Base de données
+## 1. Configuration Supabase
 
-- [ ] 1.1 Créer la table `users` (id, first_name, last_name, dob, email, password_hash, auth_provider, provider_id, geolocation_granted, created_at)
-- [ ] 1.2 Créer la table `refresh_tokens` (id, user_id, token_hash, expires_at, revoked_at)
-- [ ] 1.3 Ajouter les index sur `users.email` et `refresh_tokens.token_hash`
+- [ ] 1.1 Créer le projet Supabase (région UE / Paris)
+- [ ] 1.2 Activer le provider Email (inscription email/mdp)
+- [ ] 1.3 Régler l'expiry du JWT access token à 15 min ; vérifier la rotation des refresh tokens
+- [ ] 1.4 Désactiver le blocage par confirmation d'email au MVP (confirmation non bloquante)
+- [ ] 1.5 Configurer le provider Google (OAuth 2.0 — client id/secret à fournir au `/wizard`, reporté)
+- [ ] 1.6 Configurer le provider Apple (Sign-In — clés à fournir au `/wizard`, reporté)
+- [ ] 1.7 Versionner la configuration et les migrations dans `supabase/`
 
-## 2. API Auth — Email/Mdp
+## 2. Base de données — profil
 
-- [ ] 2.1 `POST /auth/register` — inscription email/mdp avec validation (nom, prénom, DOB, email unique, mdp ≥ 8 chars)
-- [ ] 2.2 `POST /auth/login` — connexion email/mdp, retourne access token + refresh token
-- [ ] 2.3 `POST /auth/refresh` — rotation du refresh token, retourne nouvel access token + refresh token
-- [ ] 2.4 `POST /auth/logout` — révocation du refresh token en base
-- [ ] 2.5 `POST /auth/forgot-password` — envoi email de réinitialisation (réponse identique email existant ou non)
-- [ ] 2.6 `POST /auth/reset-password` — validation du token de reset et mise à jour du mot de passe
+- [ ] 2.1 Migration : table `public.profiles` (`id` FK → `auth.users.id`, `first_name`, `last_name`, `created_at`)
+- [ ] 2.2 Trigger `on auth.users insert` → créer la ligne `profiles` depuis les métadonnées (`first_name`, `last_name`)
+- [ ] 2.3 Politiques RLS : un rider ne peut `select`/`update` que sa propre ligne `profiles`
+- [ ] 2.4 Index sur `profiles.id` (clé primaire) — pas de table `users`/`refresh_tokens` maison (gérées par Supabase)
 
-## 3. API Auth — SSO
+## 3. Mobile — client Supabase & session
 
-- [ ] 3.1 Intégration Google OAuth 2.0 — `POST /auth/google`
-- [ ] 3.2 Intégration Apple Sign-In — `POST /auth/apple`
-- [ ] 3.3 Webhook Apple revoke — `POST /auth/apple/revoke`
-- [ ] 3.4 Logique upsert : créer le compte si premier SSO, connecter si existant
+- [ ] 3.1 Installer et initialiser `supabase-js` dans l'app Expo
+- [ ] 3.2 Adaptateur de stockage sur `expo-secure-store` (Keychain/Keystore), avec découpage si session > ~2 Ko
+- [ ] 3.3 Activer l'auto-refresh de l'access token au démarrage et en tâche de fond
+- [ ] 3.4 Gérer l'état de session (connecté / déconnecté) et la redirection vers login si refresh invalide
 
-## 4. Middleware JWT
+## 4. Mobile — inscription & connexion email/mdp
 
-- [ ] 4.1 Middleware de validation du JWT sur toutes les routes protégées
-- [ ] 4.2 Retourner `TOKEN_EXPIRED` (401) quand l'access token est expiré
-- [ ] 4.3 Retourner `UNAUTHORIZED` (401) pour token invalide ou manquant
+- [ ] 4.1 Écran formulaire : nom, prénom (pas de date de naissance)
+- [ ] 4.2 Écran email + mot de passe avec validation temps réel (mdp ≥ 8 chars)
+- [ ] 4.3 Inscription via `supabase.auth.signUp` en passant `first_name`/`last_name` en métadonnées
+- [ ] 4.4 Connexion via `supabase.auth.signInWithPassword`
+- [ ] 4.5 Erreur email déjà utilisé (409) et identifiants incorrects (401 générique)
+- [ ] 4.6 Écran « Mot de passe oublié » → `supabase.auth.resetPasswordForEmail`
+- [ ] 4.7 Écran de réinitialisation depuis le lien email → `supabase.auth.updateUser`
 
-## 5. Mobile — Écrans d'inscription
+## 5. Mobile — SSO Google & Apple
 
-- [ ] 5.1 Écran 1 : formulaire nom, prénom, date de naissance
-- [ ] 5.2 Écran 2 : email + mot de passe avec validation en temps réel
-- [ ] 5.3 Boutons Google SSO et Apple Sign-In sur l'écran d'accueil
-- [ ] 5.4 Écran de connexion (email/mdp + Google + Apple)
-- [ ] 5.5 Écran "Mot de passe oublié"
-- [ ] 5.6 Écran de réinitialisation de mot de passe (depuis lien email)
+- [ ] 5.1 Flux Google natif Expo → échange de l'`id_token` via `supabase.auth.signInWithIdToken`
+- [ ] 5.2 Flux Apple (`expo-apple-authentication`) → échange de l'`id_token` via `supabase.auth.signInWithIdToken`
+- [ ] 5.3 Boutons Google / Apple sur l'écran d'accueil et de connexion
+- [ ] 5.4 Vérifier que le trigger crée bien le `profiles` au premier SSO (nom depuis le provider, email éventuellement masqué par Apple)
 
-## 6. Mobile — Géolocalisation onboarding
+## 6. Mobile — géolocalisation onboarding (non-bloquante)
 
-- [ ] 6.1 Écran pédagogique avant demande de permission ("Pourquoi on a besoin de ta position")
+- [ ] 6.1 Écran pédagogique avant la demande de permission (« Pourquoi on a besoin de ta position »)
 - [ ] 6.2 Demande de permission géolocalisation native (iOS + Android)
-- [ ] 6.3 Écran bloquant si permission refusée avec bouton "Ouvrir les paramètres"
-- [ ] 6.4 Détection du changement de permission et déblocage automatique
+- [ ] 6.3 Si accordée : stocker la position initiale et rediriger vers la carte
+- [ ] 6.4 Si refusée : rediriger vers la carte avec un champ de recherche de lieu (autocomplete) pour saisir la zone — **pas** d'écran bloquant
+- [ ] 6.5 Nudge dans les paramètres pour activer la géolocalisation plus tard ; déblocage auto de la détection si activée
 
-## 7. Mobile — Gestion des tokens
+## 7. Révocation Apple (à préciser)
 
-- [ ] 7.1 Stockage du refresh token dans Keychain (iOS) / Keystore (Android)
-- [ ] 7.2 Renouvellement silencieux de l'access token au démarrage de l'app
-- [ ] 7.3 Intercepteur HTTP : auto-refresh si 401 `TOKEN_EXPIRED`, logout si refresh invalide
+- [ ] 7.1 Prévoir le traitement de la révocation de token Apple pour invalider la session côté Supabase (solutioning)

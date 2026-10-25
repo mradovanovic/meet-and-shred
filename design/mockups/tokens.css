@@ -1,0 +1,222 @@
+/* Meet & Shred — design tokens
+   Extrait du prototype Claude Design v3 (source de vérité visuelle).
+   Thème sombre. Variables CSS = tokens à porter en React Native. */
+
+:root {
+  /* ---- Carbon — neutral dark ramp (app canvas, mirrors the dark map) ---- */
+  --carbon-950: #090B0C;
+  --carbon-900: #0F1314;
+  --carbon-850: #14191B;
+  --carbon-800: #1A2023;
+  --carbon-700: #232B2F;
+  --carbon-600: #2E383D;
+  --carbon-500: #3C474D;
+  --carbon-400: #5C696F;
+  --carbon-300: #859399;
+  --carbon-200: #B4BFC4;
+  --carbon-100: #E4EAEB;
+  --carbon-050: #F3F7F6;
+  --white: #FFFFFF;
+
+  /* ---- Shred Red — the brand. Logo, liseret band, primary CTA. ---- */
+  --logo-red: #FF0000;   /* logo artwork only — never UI */
+  --red-700: #A8121A;
+  --red-600: #C8161E;
+  --red-500: #E31B23;    /* primary brand / CTA (white text ≥ 4.5:1) */
+  --red-400: #F2434A;
+  --red-300: #FF7A7F;
+  --red-tint-12: rgba(227, 27, 35, 0.12);
+  --red-tint-20: rgba(227, 27, 35, 0.22);
+
+  /* ---- Heritage secondaries ---- */
+  --lagoon-500: #00C8C8; /* 2015 profile turquoise — secondary accent, focus */
+  --lagoon-400: #3DE0DE;
+  --lagoon-tint: rgba(0, 200, 200, 0.16);
+  --navy-700: #1B2F80;   /* 2015 footer navy */
+  --navy-900: #17185E;
+  --grape-500: #7A22E6;  /* "riders" sticker purple — social/rider accents */
+
+  /* ---- Event phases (2015 "My events" color blocks) ---- */
+  --phase-live: #0B6FE0;     /* This event is happening  (blue)   */
+  --phase-next: #FFE400;     /* Next event coming up     (yellow) */
+  --phase-mine: #00C232;     /* Your events              (green)  */
+  --phase-past: #36495A;     /* Past events you attended (slate)  */
+
+  /* ---- Spot status — config-driven (spec: green/blue/orange/red/grey) ---- */
+  --status-open: #2FCB8B;
+  --status-info: #3D9BFF;
+  --status-warn: #FF9F1C;
+  --status-closed: #FF4D4D;
+  --status-off: #6E7B82;
+  --status-open-tint: rgba(47, 203, 139, 0.16);
+  --status-info-tint: rgba(61, 155, 255, 0.16);
+  --status-warn-tint: rgba(255, 159, 28, 0.16);
+  --status-closed-tint: rgba(255, 77, 77, 0.16);
+  --status-off-tint: rgba(110, 123, 130, 0.18);
+
+  /* ---- Discipline category accents (filter chips only) ---- */
+  --cat-moto: #FF7A45;
+  --cat-velo: #8BD43A;
+  --cat-eau: #2FB8FF;
+  --cat-snow: #9FB4FF;
+  --cat-urban: #E36AF5;
+
+  /* ---- Map ---- */
+  --map-bg: #0B0F10;
+  --map-land: #131A1C;
+  --map-road: #28343A;
+  --map-water: #0E1A20;
+  --map-self: #3D9BFF;
+
+  /* ============================================================
+     SEMANTIC ALIASES — prefer these in components
+     ============================================================ */
+  --bg: var(--carbon-950);
+  --surface: var(--carbon-900);
+  --surface-card: var(--carbon-800);
+  --surface-raised: var(--carbon-700);
+  --surface-nav: var(--carbon-850);
+
+  --border: var(--carbon-600);
+  --border-strong: var(--carbon-500);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --hairline: rgba(255, 255, 255, 0.06);
+
+  --text: var(--carbon-050);
+  --text-secondary: var(--carbon-200);
+  --text-muted: var(--carbon-300);
+  --text-disabled: var(--carbon-400);
+  --text-on-status: var(--carbon-950);
+
+  --accent: var(--red-500);
+  --accent-hover: var(--red-400);
+  --accent-press: var(--red-600);
+  --accent-soft: var(--red-tint-12);
+  --on-accent: var(--white);
+  --text-on-accent: var(--white);
+  --accent-2: var(--lagoon-500);
+  --on-accent-2: var(--carbon-950);
+
+  --focus-ring: rgba(0, 200, 200, 0.6);
+  --overlay: rgba(5, 7, 8, 0.66);
+  --backdrop-blur: 18px;
+}
+
+:root {
+  --font-display: "Roboto", system-ui, -apple-system, sans-serif;
+  --font-sans: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-script: "Kaushan Script", "Brush Script MT", cursive;
+
+  /* ---- Weights (Roboto ships 300/400/500/700/900) ---- */
+  --fw-light: 300; /* @kind font */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium: 500; /* @kind font */
+  --fw-semibold: 500; /* @kind font */
+  --fw-bold: 700; /* @kind font */
+  --fw-extrabold: 900; /* @kind font */
+  --fw-black: 900; /* @kind font */
+
+  /* ---- Type scale ---- */
+  --fs-display: 44px;
+  --fs-h1: 34px;
+  --fs-h2: 26px;
+  --fs-h3: 21px;
+  --fs-title: 18px;
+  --fs-body: 16px;
+  --fs-sm: 14px;
+  --fs-xs: 12px;
+
+  /* ---- Line heights ---- */
+  --lh-tight: 1.05; /* @kind font */
+  --lh-snug: 1.2; /* @kind font */
+  --lh-normal: 1.45; /* @kind font */
+  --lh-relaxed: 1.6; /* @kind font */
+
+  /* ---- Tracking ---- */
+  --ls-display: -0.02em; /* @kind font */
+  --ls-tight: -0.01em; /* @kind font */
+  --ls-normal: 0; /* @kind font */
+  --ls-label: 0.06em; /* @kind font */
+  --ls-wide: 0.12em; /* @kind font */
+
+  /* ---- Composite roles ----
+     Headlines: set the lead-in words in --fw-light and the punch words
+     in --fw-black, e.g. <span light>Next event</span> <b>coming up</b>. */
+  --text-display: var(--fw-light) var(--fs-display) / var(--lh-tight) var(--font-display);
+  --text-h1: var(--fw-light) var(--fs-h1) / var(--lh-tight) var(--font-display);
+  --text-h2: var(--fw-light) var(--fs-h2) / var(--lh-snug) var(--font-display);
+  --text-h3: var(--fw-bold) var(--fs-h3) / var(--lh-snug) var(--font-sans);
+  --text-title: var(--fw-bold) var(--fs-title) / var(--lh-snug) var(--font-sans);
+  --text-body: var(--fw-regular) var(--fs-body) / var(--lh-normal) var(--font-sans);
+  --text-body-strong: var(--fw-medium) var(--fs-body) / var(--lh-normal) var(--font-sans);
+  --text-meta: var(--fw-regular) var(--fs-sm) / var(--lh-normal) var(--font-sans);
+  --text-mono: var(--fw-medium) var(--fs-sm) / 1 var(--font-mono);
+  --text-sticker: var(--fw-regular) var(--fs-h2) / 1 var(--font-script);
+}
+
+:root {
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* ---- Layout rhythm ---- */
+  --gutter: 16px;        /* default screen side padding (mobile) */
+  --gutter-lg: 20px;
+  --section-gap: 24px;   /* between major blocks */
+  --stack-gap: 12px;     /* between list rows */
+  --inline-gap: 8px;     /* between inline chips/icons */
+
+  /* ---- Touch / hit targets (mobile — never below 44px) ---- */
+  --hit-min: 44px;
+  --control-sm: 36px;
+  --control-md: 44px;
+  --control-lg: 52px;
+
+  /* ---- Fixed mobile chrome ---- */
+  --statusbar-h: 44px;
+  --tabbar-h: 64px;
+  --header-h: 56px;
+}
+
+:root {
+  --radius-xs: 6px;   /* tags, small inputs */
+  --radius-sm: 10px;  /* buttons, inputs */
+  --radius-md: 14px;  /* chips, segmented control */
+  --radius-lg: 18px;  /* cards */
+  --radius-xl: 24px;  /* hero cards, bottom sheets (top corners) */
+  --radius-2xl: 28px; /* swipe cards */
+  --radius-pill: 999px; /* status pills, avatars, FAB */
+}
+
+:root {
+  /* Drop shadows — deep and soft against dark */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 14px 36px rgba(0, 0, 0, 0.55);
+  --shadow-sheet: 0 -16px 44px rgba(0, 0, 0, 0.55); /* bottom sheets cast upward */
+
+  /* Inner top highlight — the "lit edge" on raised surfaces */
+  --edge-top: inset 0 1px 0 rgba(255, 255, 255, 0.06); /* @kind shadow */
+
+  /* Marker / pin shadow on the map */
+  --shadow-marker: 0 4px 10px rgba(0, 0, 0, 0.6);
+
+  /* Glows for live/active emphasis */
+  --glow-brand: 0 0 0 4px var(--red-tint-20); /* @kind shadow */
+  --glow-open: 0 0 16px rgba(47, 203, 139, 0.45);
+  --glow-live: 0 0 20px rgba(227, 27, 35, 0.45);
+
+  /* Map "protection" gradient — fades the dark map under top/bottom chrome */
+  --scrim-top: linear-gradient(to bottom, rgba(9, 11, 12, 0.85), rgba(9, 11, 12, 0)); /* @kind other */
+  --scrim-bottom: linear-gradient(to top, rgba(9, 11, 12, 0.92), rgba(9, 11, 12, 0)); /* @kind other */
+}
+

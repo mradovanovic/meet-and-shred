@@ -64,4 +64,4 @@ Un spot multi-disciplines affiche le statut de sa discipline principale (premiè
 
 ## Open Questions
 
-- Nom définitif du rôle gestionnaire de spot (`spot_manager` ? `spot_owner` ? `venue_manager` ?)
+- ~~Nom définitif du rôle gestionnaire de spot~~ → **Résolu : `spot_manager`** (il gère sans être forcément propriétaire du lieu ; voir CONTEXT.md)

@@ -1,11 +1,11 @@
 ## ADDED Requirements
 
 ### Requirement: Inscription par email
-Le système SHALL permettre à un rider de créer un compte avec nom, prénom, date de naissance et email/mot de passe. Le mot de passe SHALL contenir au minimum 8 caractères.
+Le système SHALL permettre à un rider de créer un compte avec nom, prénom et email/mot de passe via Supabase Auth. Le mot de passe SHALL contenir au minimum 8 caractères. Le nom et le prénom SHALL être transmis en métadonnées à l'inscription et matérialisés dans la table `profiles`.
 
 #### Scenario: Inscription email réussie
-- **WHEN** le rider soumet un formulaire valide (nom, prénom, DOB, email unique, mdp ≥ 8 chars)
-- **THEN** le système crée le compte, retourne un access token JWT et un refresh token, et redirige vers l'étape géolocalisation
+- **WHEN** le rider soumet un formulaire valide (nom, prénom, email unique, mdp ≥ 8 chars)
+- **THEN** le système crée le compte via Supabase, crée la ligne `profiles` associée, ouvre une session (access token JWT + refresh token) et redirige vers l'étape géolocalisation
 
 #### Scenario: Email déjà utilisé
 - **WHEN** le rider tente de s'inscrire avec un email déjà enregistré
@@ -18,33 +18,33 @@ Le système SHALL permettre à un rider de créer un compte avec nom, prénom, d
 ---
 
 ### Requirement: Inscription via Google SSO
-Le système SHALL permettre l'inscription et la connexion via un compte Google (OAuth 2.0).
+Le système SHALL permettre l'inscription et la connexion via un compte Google (OAuth 2.0), configuré comme provider Supabase.
 
 #### Scenario: Première connexion Google
 - **WHEN** le rider s'authentifie via Google pour la première fois
-- **THEN** le système crée un compte à partir des données Google (nom, email), retourne les tokens JWT et redirige vers l'étape géolocalisation
+- **THEN** le système crée un compte à partir des données Google (nom, email), crée la ligne `profiles`, ouvre une session et redirige vers l'étape géolocalisation
 
 #### Scenario: Compte Google déjà lié
 - **WHEN** le rider s'authentifie via Google avec un compte déjà enregistré
-- **THEN** le système connecte le rider et retourne de nouveaux tokens JWT
+- **THEN** le système connecte le rider et ouvre une nouvelle session
 
 ---
 
 ### Requirement: Inscription via Apple Sign-In
-Le système SHALL permettre l'inscription et la connexion via Apple Sign-In (obligatoire pour App Store iOS si Google SSO est présent).
+Le système SHALL permettre l'inscription et la connexion via Apple Sign-In (obligatoire pour App Store iOS si Google SSO est présent), configuré comme provider Supabase.
 
 #### Scenario: Première connexion Apple
 - **WHEN** le rider s'authentifie via Apple pour la première fois
-- **THEN** le système crée un compte (l'email peut être masqué par Apple), retourne les tokens JWT et redirige vers l'étape géolocalisation
+- **THEN** le système crée un compte (l'email peut être masqué par Apple), crée la ligne `profiles`, ouvre une session et redirige vers l'étape géolocalisation
 
 #### Scenario: Révocation Apple
-- **WHEN** Apple envoie un webhook de révocation de token
-- **THEN** le système invalide la session du rider concerné
+- **WHEN** Apple révoque le token du rider
+- **THEN** le système invalide la session du rider concerné côté Supabase
 
 ---
 
-### Requirement: Géolocalisation obligatoire à l'onboarding
-Le système SHALL demander la permission de géolocalisation à la fin du flux d'inscription. Sans cette permission, l'accès à l'application SHALL être bloqué.
+### Requirement: Géolocalisation proposée à l'onboarding (non-bloquante)
+Le système SHALL demander la permission de géolocalisation à la fin du flux d'inscription. Le refus de cette permission SHALL NOT bloquer l'accès à l'application : le rider saisit alors sa zone via un champ de recherche de lieu.
 
 #### Scenario: Permission accordée
 - **WHEN** le rider accorde la permission de géolocalisation
@@ -52,11 +52,11 @@ Le système SHALL demander la permission de géolocalisation à la fin du flux d
 
 #### Scenario: Permission refusée
 - **WHEN** le rider refuse la permission de géolocalisation
-- **THEN** le système affiche un écran bloquant expliquant que la géolocalisation est nécessaire, avec un bouton "Ouvrir les paramètres"
+- **THEN** le système redirige vers la carte principale avec un champ de recherche de lieu (autocomplete) permettant de saisir sa ville/région, et affiche un nudge pour activer la géolocalisation plus tard
 
-#### Scenario: Permission refusée puis accordée
-- **WHEN** le rider ouvre les paramètres et active la géolocalisation
-- **THEN** le système détecte le changement et débloque l'accès à la carte
+#### Scenario: Géolocalisation activée ultérieurement
+- **WHEN** le rider active la géolocalisation depuis les paramètres
+- **THEN** le système détecte le changement et utilise la position détectée à la place de la saisie manuelle
 
 ---
 
@@ -65,7 +65,7 @@ Le système SHALL permettre à un rider existant de se connecter via email/mdp, 
 
 #### Scenario: Connexion email réussie
 - **WHEN** le rider soumet un email et mot de passe valides
-- **THEN** le système retourne un access token et un refresh token
+- **THEN** le système ouvre une session (access token + refresh token)
 
 #### Scenario: Identifiants incorrects
 - **WHEN** le rider soumet un email ou mot de passe incorrect
@@ -74,11 +74,11 @@ Le système SHALL permettre à un rider existant de se connecter via email/mdp, 
 ---
 
 ### Requirement: Récupération de mot de passe
-Le système SHALL permettre à un rider de réinitialiser son mot de passe via son email.
+Le système SHALL permettre à un rider de réinitialiser son mot de passe via son email (emails Supabase Auth).
 
 #### Scenario: Email de réinitialisation envoyé
 - **WHEN** le rider soumet son email sur l'écran "Mot de passe oublié"
-- **THEN** le système envoie un email avec un lien de réinitialisation valable 1 heure, même si l'email n'existe pas (réponse identique pour éviter l'énumération)
+- **THEN** le système déclenche l'envoi d'un email de réinitialisation, avec une réponse identique que l'email existe ou non (pour éviter l'énumération)
 
 #### Scenario: Lien expiré
 - **WHEN** le rider clique sur un lien de réinitialisation expiré
