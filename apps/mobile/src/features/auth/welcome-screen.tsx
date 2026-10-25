@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, FontFamily, Radius, Spacing } from '@/theme/tokens';
+import { DisciplineMontage } from './discipline-montage';
 import { validateCredentials } from './credentials';
 
 type Mode = 'intro' | 'email';
@@ -38,6 +39,7 @@ export default function WelcomeScreen() {
     <View style={styles.root}>
       {/* Héro + liseret rouge */}
       <View style={[styles.hero, { height: mode === 'intro' ? 300 : 190 }]}>
+        <DisciplineMontage />
         <SafeAreaView edges={['top']} style={styles.heroInner}>
           <Text style={styles.heroKicker}>Bienvenue sur</Text>
           <Text style={styles.wordmark}>meetnshred</Text>
@@ -249,7 +251,7 @@ function Checkbox({ checked, onToggle, label }: { checked: boolean; onToggle: ()
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.bg },
-  hero: { backgroundColor: Colors.surfaceCard, justifyContent: 'flex-end' },
+  hero: { backgroundColor: Colors.surfaceCard, justifyContent: 'flex-end', overflow: 'hidden' },
   heroInner: { alignItems: 'center', paddingBottom: Spacing.xxl, gap: Spacing.sm },
   heroKicker: { color: Colors.textSecondary, fontSize: 15, fontFamily: FontFamily.light },
   wordmark: { color: Colors.white, fontSize: 46, fontFamily: FontFamily.script, lineHeight: 56 },
