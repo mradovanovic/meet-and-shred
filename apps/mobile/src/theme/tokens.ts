@@ -62,11 +62,25 @@ export const FontSize = {
   xs: 12,
 } as const;
 
-/** Roboto ships 300/400/500/700/900 ; on approxime avec la police système en attendant le chargement des polices. */
+/** Poids Roboto (fallback si la police custom n'est pas chargée). */
 export const FontWeight = {
   light: '300',
   regular: '400',
   medium: '500',
   bold: '700',
   black: '900',
+} as const;
+
+/**
+ * Familles de polices chargées via @expo-google-fonts (voir _layout).
+ * Avec une police custom, on pose `fontFamily` (le `fontWeight` est ignoré).
+ * Roboto pour le texte, Kaushan Script pour le wordmark de marque.
+ */
+export const FontFamily = {
+  light: 'Roboto_300Light',
+  regular: 'Roboto_400Regular',
+  medium: 'Roboto_500Medium',
+  bold: 'Roboto_700Bold',
+  black: 'Roboto_900Black',
+  script: 'KaushanScript_400Regular',
 } as const;

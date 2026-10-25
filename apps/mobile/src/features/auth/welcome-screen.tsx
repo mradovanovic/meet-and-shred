@@ -1,3 +1,4 @@
+import { FontAwesome6 } from '@expo/vector-icons';
 import { useState, type ComponentProps, type ReactNode } from 'react';
 import {
   Platform,
@@ -11,22 +12,23 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Colors, FontWeight, Radius, Spacing } from '@/theme/tokens';
+import { Colors, FontFamily, Radius, Spacing } from '@/theme/tokens';
 import { validateCredentials } from './credentials';
 
 type Mode = 'intro' | 'email';
+type ProviderIcon = ComponentProps<typeof FontAwesome6>['name'];
 
-// Fournisseurs de connexion (change auth-registration). Apple est ajouté sur iOS
+// Fournisseurs de connexion (change auth-registration). Apple ajouté sur iOS
 // (règle App Store : obligatoire dès qu'un autre service tiers est proposé).
-const BASE_PROVIDERS = [
-  { key: 'google', label: 'Continuer avec Google' },
-  { key: 'facebook', label: 'Continuer avec Facebook' },
-  { key: 'tiktok', label: 'Continuer avec TikTok' },
-] as const;
+const BASE_PROVIDERS: { key: string; label: string; icon: ProviderIcon }[] = [
+  { key: 'google', label: 'Continuer avec Google', icon: 'google' },
+  { key: 'facebook', label: 'Continuer avec Facebook', icon: 'facebook' },
+  { key: 'tiktok', label: 'Continuer avec TikTok', icon: 'tiktok' },
+];
 
 const PROVIDERS =
   Platform.OS === 'ios'
-    ? ([{ key: 'apple', label: 'Continuer avec Apple' }, ...BASE_PROVIDERS] as const)
+    ? [{ key: 'apple', label: 'Continuer avec Apple', icon: 'apple' as ProviderIcon }, ...BASE_PROVIDERS]
     : BASE_PROVIDERS;
 
 export default function WelcomeScreen() {
@@ -35,7 +37,7 @@ export default function WelcomeScreen() {
   return (
     <View style={styles.root}>
       {/* Héro + liseret rouge */}
-      <View style={[styles.hero, { height: mode === 'intro' ? 300 : 180 }]}>
+      <View style={[styles.hero, { height: mode === 'intro' ? 300 : 190 }]}>
         <SafeAreaView edges={['top']} style={styles.heroInner}>
           <Text style={styles.heroKicker}>Bienvenue sur</Text>
           <Text style={styles.wordmark}>meetnshred</Text>
@@ -65,13 +67,26 @@ function Intro({ onEmail }: { onEmail: () => void }) {
 
       <View style={styles.actions}>
         {PROVIDERS.map((p) => (
-          <Button key={p.key} variant="secondary" onPress={() => {}}>
+          <Button
+            key={p.key}
+            variant="secondary"
+            icon={<FontAwesome6 name={p.icon} size={18} color={Colors.text} />}
+            onPress={() => {}}
+          >
             {p.label}
           </Button>
         ))}
-        <Button variant="primary" onPress={onEmail}>
+
+        <Divider label="ou" />
+
+        <Button
+          variant="primary"
+          icon={<FontAwesome6 name="envelope" size={17} color={Colors.white} />}
+          onPress={onEmail}
+        >
           Avec mon email
         </Button>
+
         <LegalLine />
       </View>
     </ScrollView>
@@ -140,9 +155,10 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 function Button({
   variant = 'secondary',
   disabled,
+  icon,
   children,
   ...rest
-}: PressableProps & { variant?: ButtonVariant; disabled?: boolean; children: ReactNode }) {
+}: PressableProps & { variant?: ButtonVariant; disabled?: boolean; icon?: ReactNode; children: ReactNode }) {
   const bg =
     variant === 'primary'
       ? disabled
@@ -168,8 +184,21 @@ function Button({
       style={({ pressed }) => [styles.btn, { backgroundColor: bg }, pressed && !disabled && { opacity: 0.85 }]}
       {...rest}
     >
-      <Text style={[styles.btnText, { color }]}>{children}</Text>
+      <View style={styles.btnInner}>
+        {icon ? <View style={styles.btnIcon}>{icon}</View> : null}
+        <Text style={[styles.btnText, { color }]}>{children}</Text>
+      </View>
     </Pressable>
+  );
+}
+
+function Divider({ label }: { label: string }) {
+  return (
+    <View style={styles.divider}>
+      <View style={styles.dividerLine} />
+      <Text style={styles.dividerLabel}>{label}</Text>
+      <View style={styles.dividerLine} />
+    </View>
   );
 }
 
@@ -211,7 +240,7 @@ function Checkbox({ checked, onToggle, label }: { checked: boolean; onToggle: ()
   return (
     <Pressable accessibilityRole="checkbox" accessibilityState={{ checked }} onPress={onToggle} style={styles.checkRow}>
       <View style={[styles.checkBox, checked && styles.checkBoxOn]}>
-        {checked ? <Text style={styles.checkMark}>✓</Text> : null}
+        {checked ? <FontAwesome6 name="check" size={12} color={Colors.white} /> : null}
       </View>
       <Text style={styles.checkLabel}>{label}</Text>
     </Pressable>
@@ -221,15 +250,9 @@ function Checkbox({ checked, onToggle, label }: { checked: boolean; onToggle: ()
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: Colors.bg },
   hero: { backgroundColor: Colors.surfaceCard, justifyContent: 'flex-end' },
-  heroInner: { alignItems: 'center', paddingBottom: Spacing.xxl, gap: Spacing.xs },
-  heroKicker: { color: Colors.white, fontSize: 15, fontWeight: FontWeight.light },
-  wordmark: {
-    color: Colors.white,
-    fontSize: 40,
-    fontWeight: FontWeight.black,
-    fontStyle: 'italic',
-    letterSpacing: -1,
-  },
+  heroInner: { alignItems: 'center', paddingBottom: Spacing.xxl, gap: Spacing.sm },
+  heroKicker: { color: Colors.textSecondary, fontSize: 15, fontFamily: FontFamily.light },
+  wordmark: { color: Colors.white, fontSize: 46, fontFamily: FontFamily.script, lineHeight: 56 },
   liseret: { height: 8, backgroundColor: Colors.accent },
 
   body: { padding: Spacing.xl, gap: Spacing.lg, flexGrow: 1 },
@@ -245,22 +268,28 @@ const styles = StyleSheet.create({
   },
   gestureGlyph: { fontSize: 28 },
 
-  tagline: { color: Colors.text, fontSize: 22, lineHeight: 28, textAlign: 'center', fontWeight: FontWeight.light },
-  taglineBold: { fontWeight: FontWeight.black },
+  tagline: { color: Colors.text, fontSize: 22, lineHeight: 29, textAlign: 'center', fontFamily: FontFamily.light },
+  taglineBold: { fontFamily: FontFamily.black },
 
-  formTitle: { color: Colors.text, fontSize: 26, fontWeight: FontWeight.light },
-  formTitleBold: { fontWeight: FontWeight.black },
+  formTitle: { color: Colors.text, fontSize: 26, fontFamily: FontFamily.light },
+  formTitleBold: { fontFamily: FontFamily.black },
 
   actions: { marginTop: 'auto', gap: Spacing.md, paddingTop: Spacing.lg },
 
-  btn: { height: 52, borderRadius: Radius.sm, alignItems: 'center', justifyContent: 'center', paddingHorizontal: Spacing.lg },
-  btnText: { fontSize: 16, fontWeight: FontWeight.medium },
+  btn: { height: 52, borderRadius: Radius.sm, justifyContent: 'center', paddingHorizontal: Spacing.lg },
+  btnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
+  btnIcon: { width: 22, alignItems: 'center' },
+  btnText: { fontSize: 16, fontFamily: FontFamily.medium },
 
-  legal: { color: Colors.textMuted, fontSize: 12, textAlign: 'center', lineHeight: 18, marginTop: Spacing.xs },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, paddingVertical: Spacing.xs },
+  dividerLine: { flex: 1, height: 1, backgroundColor: Colors.border },
+  dividerLabel: { color: Colors.textMuted, fontSize: 13, fontFamily: FontFamily.regular },
+
+  legal: { color: Colors.textMuted, fontSize: 12, textAlign: 'center', lineHeight: 18, marginTop: Spacing.xs, fontFamily: FontFamily.regular },
   legalLink: { color: Colors.textSecondary, textDecorationLine: 'underline' },
 
   field: { gap: Spacing.xs },
-  fieldLabel: { color: Colors.textSecondary, fontSize: 13, fontWeight: FontWeight.medium },
+  fieldLabel: { color: Colors.textSecondary, fontSize: 13, fontFamily: FontFamily.medium },
   input: {
     height: 50,
     borderRadius: Radius.sm,
@@ -270,9 +299,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     color: Colors.text,
     fontSize: 16,
+    fontFamily: FontFamily.regular,
   },
   inputError: { borderColor: Colors.danger },
-  errorText: { color: Colors.danger, fontSize: 12 },
+  errorText: { color: Colors.danger, fontSize: 12, fontFamily: FontFamily.regular },
 
   checkRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md },
   checkBox: {
@@ -285,6 +315,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkBoxOn: { backgroundColor: Colors.accent, borderColor: Colors.accent },
-  checkMark: { color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold },
-  checkLabel: { color: Colors.textSecondary, fontSize: 13, flex: 1 },
+  checkLabel: { color: Colors.textSecondary, fontSize: 13, flex: 1, fontFamily: FontFamily.regular },
 });
