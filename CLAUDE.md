@@ -18,11 +18,12 @@ Langue de travail du projet : **français**. Specs, commits, discussions — tou
 
 | Couche | Choix |
 |---|---|
-| Mobile | React Native Expo (iOS + Android) |
-| Auth | JWT stateless + refresh token, email, Google OAuth 2.0, Facebook, TikTok, Apple Sign-In |
-| API | REST (stack backend non finalisée — voir open questions dans les designs) |
-| Base de données | PostgreSQL (JSONB utilisé pour les schémas matériel et configs) |
-| Stockage photos | S3 ou Cloudflare R2 (URLs en base, fichiers en object storage) |
+| Mobile | React Native Expo (iOS + Android) — TypeScript |
+| Backend | **Supabase** (tout-en-un) — voir ADR-0001 ([docs/adr/0001](docs/adr/0001-socle-technique-expo-supabase.md)) |
+| Auth | Supabase Auth : email, Google, Facebook, Apple (natifs) + TikTok (OIDC custom) ; JWT access 15 min + refresh rotatif |
+| API / logique métier | PostgREST (auto) + Edge Functions (TypeScript) — pas de serveur maison |
+| Base de données | Supabase PostgreSQL + PostGIS (JSONB pour schémas matériel et configs) |
+| Stockage photos | Supabase Storage (URLs en base, fichiers en object storage) |
 | Cartes | Google Maps API |
 | Push notifications | FCM (Android) + APNs (iOS) |
 | i18n | i18next (mobile), langues : FR (défaut), EN, ES |
