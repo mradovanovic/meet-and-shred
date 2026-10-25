@@ -10,8 +10,7 @@ Les events sont au cœur de l'engagement communautaire. Le swipe crée un flux d
 - Vue liste alternative au swipe
 - Feed filtré par disciplines du rider + distance
 - Capacité optionnelle par event
-- Social ride créable par tout rider dès le MVP
-- Sessions organisées (roulage, track day, compét) nécessitent un rôle organisateur
+- Tous les types d'event nécessitent un rôle (gestionnaire de spot, organisateur, ou gestionnaire de magasin) — plus de type créable librement par un simple rider (voir sessions-core pour les sorties spontanées)
 - Partage via deep link
 - Annulation avec notification automatique
 
@@ -24,15 +23,16 @@ Les events sont au cœur de l'engagement communautaire. Le swipe crée un flux d
 ## Decisions
 
 **Types d'events en config, pas en enum**
-→ Table `event_types` ou fichier de config avec les types disponibles. Chaque type a : slug, label multilingue `{ fr, en, es }`, icône, qui peut créer (rider / organisateur / gestionnaire), capacité obligatoire ou optionnelle. Types de base :
+→ Table `event_types` ou fichier de config avec les types disponibles. Chaque type a : slug, label multilingue `{ fr, en, es }`, icône, qui peut créer (organisateur / gestionnaire), capacité obligatoire ou optionnelle. Types de base — tous réservés à un rôle, plus aucun créable librement par un simple rider :
 
 | Slug | Label FR | Créateur | Capacité |
 |------|----------|----------|----------|
-| `spot_opening` | Ouverture spot | Gestionnaire spot | Optionnelle |
+| `spot_opening` | Ouverture spot | Gestionnaire du spot lié | Optionnelle |
 | `track_day` | Roulage / Track day | Organisateur | Obligatoire |
-| `social_ride` | Social ride | Tout rider | Optionnelle |
 | `competition` | Compétition | Organisateur | Obligatoire |
-| `shop_event` | Event shop | Gestionnaire shop | Optionnelle |
+| `shop_event` | Event shop | Gestionnaire du magasin lié | Optionnelle |
+
+L'ancien type `social_ride` (créable par tout rider) est retiré : les sorties spontanées entre riders sont désormais des **sessions**, un concept séparé et plus léger porté par `sessions-core` (pas de rôle requis, pas de capacité, pas de paiement).
 
 **Swipe = action directe**
 → Swipe right = inscription immédiate + animation verte. Pas de popup de confirmation — ça tuerait l'UX. L'annulation reste possible depuis la page de détail ou "Mes events".
@@ -40,15 +40,19 @@ Les events sont au cœur de l'engagement communautaire. Le swipe crée un flux d
 **Capacité optionnelle**
 → Le créateur choisit si son event a une limite de participants. Si oui : même logique atomique que les spots (SELECT FOR UPDATE). Si non : inscriptions illimitées.
 
-**Event lié ou non à un spot**
-→ `spot_id` nullable. Un `spot_opening` ou `track_day` est toujours lié à un spot. Un `social_ride` peut avoir un point de départ libre (lat/lng + adresse libre).
+**Event lié à un spot ou à un magasin**
+→ `spot_id` nullable. Un `spot_opening`, `track_day` ou `competition` est lié à un spot. Un `shop_event` est lié à un magasin — ce qui exige un second champ `shop_id` nullable sur `events` (absent de la conception initiale, ajouté ici : un event a soit un `spot_id`, soit un `shop_id`, jamais les deux). Sans `social_ride`, il n'y a plus de type avec un point de départ totalement libre — tout event est désormais rattaché à un lieu géré (spot ou magasin).
 
 **Disciplines sur les events**
 → Un event peut couvrir plusieurs disciplines. Liaison N:N avec `disciplines`.
+
+**Chevauchement horaire — avertissement, pas blocage**
+→ Un rider ne peut pas physiquement être à deux endroits en même temps, mais un blocage strict risque de générer des faux positifs (ex : deux sessions avec une fenêtre active de 3h qui se recoupent de 10 minutes sans réel conflit). Le système avertit plutôt que d'empêcher : après un swipe, le chevauchement s'ajoute au snackbar "Annuler" déjà existant (même fenêtre de 3 secondes, cohérent avec le principe "swipe = action directe, pas de popup") ; depuis la page de détail (hors swipe), une confirmation explicite s'affiche avant de finaliser. La vérification croise `event_inscriptions` et `session_participants` (voir sessions-core) sur les plages `starts_at`/`ends_at`.
 
 ## Risks / Trade-offs
 
 - [Swipe involontaire] Rider swipe accidentellement → Bouton "Annuler" visible 3 secondes post-inscription (snackbar)
 - [Events obsolètes] Events passés → Archivage automatique 24h après `ends_at`
-- [Spam social rides] Riders qui créent des faux events → Rate limiting + signalement communautaire
 - [Roulages payants] Track days avec tarif → Lien paiement externe comme les spots au MVP, natif en Phase 3
+- [Retrait de social_ride] Les sessions déjà créées comme `social_ride` avant ce changement (s'il y en avait en prod) devraient être migrées vers `sessions-core` — sans objet au MVP puisque rien n'est encore implémenté
+- [Faux positif de chevauchement] Deux engagements proches mais pas réellement incompatibles (ex : deux spots voisins) génèrent quand même un avertissement → assumé, le rider reste juge, l'avertissement n'est jamais bloquant

@@ -18,7 +18,7 @@
 
 - [ ] 2.1 `GET /riders/:id` — profil public (photos, disciplines, level, bio, equipment groupé par discipline)
 - [ ] 2.2 `PUT /riders/me` — mise à jour du profil (bio, level, localisation)
-- [ ] 2.3 `PUT /riders/me/disciplines` — mise à jour des disciplines sélectionnées
+- [ ] 2.3 `PUT /riders/me/disciplines` — mise à jour des disciplines sélectionnées, rejet si plus de 5 (validation côté serveur, pas seulement côté UI)
 - [ ] 2.4 `GET /disciplines` — liste complète avec schémas matériel, groupée par catégorie
 
 ## 3. API Matériel
@@ -44,7 +44,7 @@
 
 ## 5. Mobile — Onboarding profil
 
-- [ ] 5.1 Écran sélection disciplines (grille avec icônes par catégorie, multi-sélection)
+- [ ] 5.1 Écran sélection disciplines (grille avec icônes par catégorie, multi-sélection, limite de 5 avec compteur visible et cases désactivées une fois le plafond atteint)
 - [ ] 5.2 Écran sélection niveau (Débutant / Amateur / Confirmé / Expert)
 - [ ] 5.3 Écran ajout matériel : formulaire dynamique généré depuis `equipment_schema` de la discipline
 - [ ] 5.4 Écran bio + localisation principale (skippable)
@@ -61,5 +61,6 @@
 ## 7. Mobile — Gestion du profil
 
 - [ ] 7.1 Écran édition profil (bio, niveau, localisation)
+- [ ] 7.1b Écran édition disciplines (même limite de 5, ajout/retrait, rafraîchissement du contenu carte/feed après sauvegarde)
 - [ ] 7.2 Formulaire ajout/édition setup avec champs dynamiques selon la discipline
 - [ ] 7.3 Galerie photos avec upload, suppression et drag-and-drop

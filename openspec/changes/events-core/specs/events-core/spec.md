@@ -14,14 +14,18 @@ Le système SHALL charger les types d'events disponibles depuis une config (tabl
 ---
 
 ### Requirement: Création d'event selon le rôle
-Le système SHALL restreindre la création d'events selon le type : un `social_ride` SHALL être créable par tout rider connecté, un `track_day` ou `competition` SHALL nécessiter un rôle organisateur, un `spot_opening` SHALL nécessiter d'être gestionnaire du spot lié.
-
-#### Scenario: Rider crée un social ride
-- **WHEN** un rider sans rôle particulier crée un event de type `social_ride`
-- **THEN** l'event est créé et visible dans les feeds
+Le système SHALL restreindre la création de tout event selon son type : un `track_day` ou `competition` SHALL nécessiter un rôle organisateur, un `spot_opening` SHALL nécessiter d'être gestionnaire du spot lié, un `shop_event` SHALL nécessiter d'être gestionnaire du magasin lié. Aucun type d'event ne SHALL être créable par un rider sans rôle particulier (voir sessions-core pour les sorties spontanées entre riders).
 
 #### Scenario: Rider tente de créer un track day sans rôle
 - **WHEN** un rider sans rôle organisateur tente de créer un `track_day`
+- **THEN** le système retourne une erreur 403
+
+#### Scenario: Gestionnaire de magasin crée un shop_event
+- **WHEN** le gestionnaire d'un magasin validé crée un event de type `shop_event`
+- **THEN** l'event est créé et lié à ce magasin (voir shop-core)
+
+#### Scenario: Rider tente de créer un shop_event sans être gestionnaire du magasin
+- **WHEN** un rider sans lien de gestion avec le magasin visé tente de créer un `shop_event` pour ce magasin
 - **THEN** le système retourne une erreur 403
 
 ---
@@ -34,7 +38,7 @@ Le système SHALL permettre au créateur de définir une capacité maximale de p
 - **THEN** le système retourne une erreur 409 et le bouton d'inscription est désactivé
 
 #### Scenario: Event sans limite de capacité
-- **WHEN** un social ride est créé sans limite de participants
+- **WHEN** un `shop_event` (ex : apéro de magasin) est créé sans limite de participants
 - **THEN** n'importe quel rider peut s'inscrire sans restriction
 
 ---
@@ -57,6 +61,23 @@ Le système SHALL présenter les events à venir sous forme de cartes swipables 
 #### Scenario: Feed vide
 - **WHEN** aucun event ne correspond aux disciplines et à la distance du rider
 - **THEN** le système affiche "Rien dans ta zone — élargis ton rayon ou explore la carte"
+
+---
+
+### Requirement: Avertissement en cas de chevauchement horaire
+Avant de finaliser une inscription à un event, le système SHALL vérifier si ses horaires (`starts_at`/`ends_at`) chevauchent un autre event ou une session auxquels le rider est déjà inscrit/participant (voir sessions-core). En cas de chevauchement, le système SHALL avertir le rider avant de considérer l'inscription comme définitive, sans la bloquer silencieusement.
+
+#### Scenario: Chevauchement détecté après un swipe
+- **WHEN** un rider swipe pour rejoindre un event qui chevauche un autre event ou une session déjà rejoints
+- **THEN** le snackbar affiché après le swipe signale le chevauchement ("Chevauche [nom] de 14h à 16h") en plus du bouton "Annuler", pendant les 3 secondes habituelles
+
+#### Scenario: Chevauchement détecté via la page de détail
+- **WHEN** un rider s'inscrit à un event depuis sa page de détail (hors swipe) et que les horaires chevauchent un engagement existant
+- **THEN** le système affiche une confirmation explicite du chevauchement avant de finaliser l'inscription
+
+#### Scenario: Pas de chevauchement
+- **WHEN** les horaires d'un event ne recoupent aucun autre engagement du rider
+- **THEN** aucun avertissement n'est affiché, l'inscription se déroule normalement
 
 ---
 
@@ -83,7 +104,7 @@ Le système SHALL filtrer le feed d'events par les disciplines du rider (pré-s�
 ---
 
 ### Requirement: Détail d'un event
-Le système SHALL exposer une page de détail pour chaque event avec : titre, type localisé, description, date/heure, lieu (adresse + mini-carte), discipline(s), organisateur, capacité (si définie), places restantes, liste des riders inscrits, bouton inscription/désinscription, bouton partage.
+Le système SHALL exposer une page de détail pour chaque event avec : titre, type localisé, description, date/heure, lieu (adresse + mini-carte), discipline(s), organisateur, capacité (si définie), places restantes, liste des riders inscrits, bouton inscription/désinscription, bouton partage, note moyenne et nombre d'avis une fois l'event terminé (voir reviews-core).
 
 #### Scenario: Event avec capacité
 - **WHEN** un rider consulte un track day avec 5 places restantes sur 30

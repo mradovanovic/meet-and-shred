@@ -1,7 +1,9 @@
 ## ADDED Requirements
 
 ### Requirement: Inscription à une session spot
-Le système SHALL permettre à un rider connecté de s'inscrire à un spot ouvert si des places sont disponibles.
+Cette capability s'applique aux spots de catégorie **privée** uniquement — c'est l'inscription payante/gérée par le gestionnaire du spot, distincte des sessions informelles créées librement par les riders (voir sessions-core, qui s'applique aux spots privés comme publics). Rejoindre une session au sens de sessions-core ne remplace pas cette inscription si le spot en exige une.
+
+Le système SHALL permettre à un rider connecté de s'inscrire à un spot privé ouvert si des places sont disponibles.
 
 #### Scenario: Inscription réussie
 - **WHEN** un rider s'inscrit à un spot avec des places disponibles
