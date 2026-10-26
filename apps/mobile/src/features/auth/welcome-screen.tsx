@@ -1,17 +1,10 @@
 import { FontAwesome6 } from '@expo/vector-icons';
-import { useState, type ComponentProps, type ReactNode } from 'react';
-import {
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  type PressableProps,
-} from 'react-native';
+import { useRouter } from 'expo-router';
+import { useState, type ComponentProps } from 'react';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Button } from '@/components/ui/button';
 import { Colors, FontFamily, Radius, Spacing } from '@/theme/tokens';
 import { DisciplineMontage } from './discipline-montage';
 import { validateCredentials } from './credentials';
@@ -34,6 +27,8 @@ const PROVIDERS =
 
 export default function WelcomeScreen() {
   const [mode, setMode] = useState<Mode>('intro');
+  const router = useRouter();
+  const onAuthenticated = () => router.push('/location');
 
   return (
     <View style={styles.root}>
@@ -47,12 +42,16 @@ export default function WelcomeScreen() {
       </View>
       <View style={styles.liseret} />
 
-      {mode === 'intro' ? <Intro onEmail={() => setMode('email')} /> : <EmailForm onBack={() => setMode('intro')} />}
+      {mode === 'intro' ? (
+        <Intro onEmail={() => setMode('email')} onAuthenticated={onAuthenticated} />
+      ) : (
+        <EmailForm onBack={() => setMode('intro')} onAuthenticated={onAuthenticated} />
+      )}
     </View>
   );
 }
 
-function Intro({ onEmail }: { onEmail: () => void }) {
+function Intro({ onEmail, onAuthenticated }: { onEmail: () => void; onAuthenticated: () => void }) {
   return (
     <ScrollView contentContainerStyle={styles.body}>
       <View style={styles.gestures}>
@@ -73,7 +72,7 @@ function Intro({ onEmail }: { onEmail: () => void }) {
             key={p.key}
             variant="secondary"
             icon={<FontAwesome6 name={p.icon} size={18} color={Colors.text} />}
-            onPress={() => {}}
+            onPress={onAuthenticated}
           >
             {p.label}
           </Button>
@@ -95,7 +94,7 @@ function Intro({ onEmail }: { onEmail: () => void }) {
   );
 }
 
-function EmailForm({ onBack }: { onBack: () => void }) {
+function EmailForm({ onBack, onAuthenticated }: { onBack: () => void; onAuthenticated: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [consent, setConsent] = useState(false);
@@ -139,7 +138,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
       <Checkbox checked={age} onToggle={() => setAge((v) => !v)} label="J'ai 16 ans ou plus" />
 
       <View style={styles.actions}>
-        <Button variant="primary" disabled={!canSubmit} onPress={() => {}}>
+        <Button variant="primary" disabled={!canSubmit} onPress={onAuthenticated}>
           C&apos;est parti
         </Button>
         <Button variant="ghost" onPress={onBack}>
@@ -150,49 +149,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
   );
 }
 
-// ── Composants UI (coquille — à extraire dans un design system plus tard) ──
-
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
-
-function Button({
-  variant = 'secondary',
-  disabled,
-  icon,
-  children,
-  ...rest
-}: PressableProps & { variant?: ButtonVariant; disabled?: boolean; icon?: ReactNode; children: ReactNode }) {
-  const bg =
-    variant === 'primary'
-      ? disabled
-        ? Colors.surfaceRaised
-        : Colors.accent
-      : variant === 'secondary'
-        ? Colors.surfaceRaised
-        : 'transparent';
-  const color =
-    variant === 'primary'
-      ? disabled
-        ? Colors.textMuted
-        : Colors.white
-      : variant === 'ghost'
-        ? Colors.textMuted
-        : Colors.text;
-
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityState={{ disabled: !!disabled }}
-      disabled={disabled}
-      style={({ pressed }) => [styles.btn, { backgroundColor: bg }, pressed && !disabled && { opacity: 0.85 }]}
-      {...rest}
-    >
-      <View style={styles.btnInner}>
-        {icon ? <View style={styles.btnIcon}>{icon}</View> : null}
-        <Text style={[styles.btnText, { color }]}>{children}</Text>
-      </View>
-    </Pressable>
-  );
-}
+// ── Petits composants propres à l'écran ──
 
 function Divider({ label }: { label: string }) {
   return (
@@ -277,11 +234,6 @@ const styles = StyleSheet.create({
   formTitleBold: { fontFamily: FontFamily.black },
 
   actions: { marginTop: 'auto', gap: Spacing.md, paddingTop: Spacing.lg },
-
-  btn: { height: 52, borderRadius: Radius.sm, justifyContent: 'center', paddingHorizontal: Spacing.lg },
-  btnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
-  btnIcon: { width: 22, alignItems: 'center' },
-  btnText: { fontSize: 16, fontFamily: FontFamily.medium },
 
   divider: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, paddingVertical: Spacing.xs },
   dividerLine: { flex: 1, height: 1, backgroundColor: Colors.border },
