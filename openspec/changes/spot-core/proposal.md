@@ -8,7 +8,8 @@ Les spots sont l'entité centrale de MeetNShred. Un rider a besoin de savoir en 
 - Un spot est **privé** (établissement associatif ou commercial, avec gestionnaire, tarifs, statut piloté) ou **public** (lieu gratuit sans gestionnaire, ex : une vague, un spot d'enduro en pleine nature)
 - Un spot peut couvrir plusieurs disciplines (ex : bike park DH + Enduro VTT + Dirt Jump)
 - Statuts spécifiques par discipline, définis dans des fichiers de config (pas en base), labels multilingues FR/EN/ES — s'appliquent aux spots privés uniquement
-- Création d'un spot privé réservée aux utilisateurs avec un rôle spécifique (gestionnaire validé — nom du rôle TBD) ; un spot public peut être soumis par n'importe quel rider, tous deux validés manuellement par le super admin
+- Création d'un spot privé réservée aux utilisateurs avec le rôle gestionnaire, validée par le super admin. Un spot public (libre, gratuit) peut être créé par n'importe quel rider **immédiatement, sans validation**, avec des garde-fous (suggestion de doublons à moins de 200 m, limite de créations, masquage a posteriori) ; son vrai gestionnaire peut le revendiquer
+- Le rider voit « Gratuit » ou un prix, jamais « privé » / « public »
 - Page publique du spot avec infos, photos, disciplines couvertes, statut temps réel (privé) ou activité via les sessions (public), capacité et tarifs (privé uniquement)
 - Inscriptions à une session avec gestion de capacité et lien paiement externe (spots privés) — les sorties spontanées, sur spot privé ou public, passent par les sessions (voir sessions-core)
 
@@ -26,7 +27,7 @@ Les spots sont l'entité centrale de MeetNShred. Un rider a besoin de savoir en 
 
 - Tables `spots` (avec `category` : private/public), `spot_disciplines`, `spot_photos`, `spot_inscriptions`
 - Fichiers de config `configs/spot-statuses/{discipline-slug}.json` (spots privés uniquement)
-- Rôle utilisateur requis pour créer un spot privé (TBD) ; un spot public ne requiert pas ce rôle mais reste soumis à validation
+- Rôle gestionnaire requis pour créer un spot privé ; un spot public ne requiert ni rôle ni validation
 - Dépend de `i18n-core` pour la localisation des statuts et labels
 - Notifications push sur ouverture (voir notifications-push) — spots privés uniquement, un spot public n'a pas de statut à faire évoluer
 - Index géospatial pour tri par proximité (voir map-core)

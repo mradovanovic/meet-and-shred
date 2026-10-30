@@ -13,8 +13,9 @@ context: |
   Plateforme communautaire **multi-disciplines de ride** (mobile React Native
   Expo). Elle connecte les riders en temps réel autour des spots et des events.
   L'écran central est une carte Google Maps montrant ce qui se passe autour du
-  rider (spots rideable, events, sessions). Fonctionnalité différenciante : le
-  **swipe sur les events** pour rejoindre une session sans friction.
+  rider (spots rideable, events, sessions). Fonctionnalité différenciante :
+  **rejoindre une sortie en un tap depuis la carte**, sans friction. Le swipe
+  (fil d'events et de sessions) est prévu en Phase 2.
 
   Disciplines couvertes (liste ouverte, non exhaustive) : MX, DH, Enduro
   moto/VTT, Supermoto, Freeride, FMX, Moto piste/circuit, Kite, Wakeboard (boat
@@ -70,7 +71,8 @@ context: |
     navigation-core (structure de navigation principale de l'app),
     reviews-core (avis sur spots/magasins/events), moderation-core
     (signalement de contenu).
-  - **Phase 2** : calendrier d'ouvertures récurrentes.
+  - **Phase 2** : fil swipable d'events et de sessions (onglet « Fil », vue
+    liste), calendrier d'ouvertures récurrentes.
   - **Phase 3** : paiement natif intégré, 2FA, messagerie gestionnaire↔rider.
 
   ## Workflow

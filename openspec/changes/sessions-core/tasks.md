@@ -10,7 +10,8 @@
 - [ ] 2.2 `GET /sessions/:id` — détail avec participants
 - [ ] 2.3 `POST /sessions/:id/join` / `DELETE /sessions/:id/join` — rejoindre/quitter ; retourne un flag `overlap` avec le(s) engagement(s) concerné(s) si chevauchement détecté avec un event ou une autre session du rider
 - [ ] 2.4 `GET /spots/:id/sessions` — sessions à venir liées à un spot
-- [ ] 2.5 `GET /sessions` — fil paginé avec filtres (disciplines[] résolues via le spot lié, lat, lng, radius)
+- [ ] 2.5 (Phase 2) `GET /sessions` — fil paginé avec filtres (disciplines[] résolues via le spot lié, lat, lng, radius)
+- [ ] 2.5b `PATCH /sessions/:id` — modification de l'heure et de la note par le créateur, avec notification aux participants
 - [ ] 2.6 `PATCH /sessions/:id/cancel` — annulation (créateur uniquement) + notification push aux participants
 
 ## 3. Intégration carte
@@ -25,15 +26,18 @@
 - [ ] 4.3 Page session (spot, créateur, date, participants, bouton rejoindre/quitter, rappel inscription si spot privé)
 - [ ] 4.3b Bouton "Annuler la session" visible uniquement pour le créateur ; écran affichant "Session annulée" pour les autres
 - [ ] 4.4 Bouton "Créer une session" depuis la page d'un spot (privé ou public)
-- [ ] 4.5 Fil de sessions swipable (composant partagé avec le fil d'events), toggle Events/Sessions (voir navigation-core)
-- [ ] 4.6 Vue liste alternative du fil de sessions
-- [ ] 4.7 Swipe right sur une session avec `overlap` → snackbar signale le conflit en plus du bouton "Annuler" ; rejoindre depuis la page → confirmation explicite si conflit (voir events-core, même composant partagé)
+- [ ] 4.5 Bouton « Rejoindre » dans la bottom sheet d'une session (voir map-core), snackbar « Annuler » 3 secondes, message de chevauchement avec « Rejoindre quand même » / « Annuler » (voir events-core)
+- [ ] 4.5b Écran de création : recherche du lieu, et « Ajouter ce lieu » (nom + position) qui crée un spot libre immédiatement (voir spot-core)
+- [ ] 4.5c Écran de modification de sa session (heure, note) et prévenir les participants
+- [ ] 4.6 (Phase 2, hors première version) Fil de sessions swipable, toggle Events/Sessions (voir navigation-core) et vue liste alternative
+- [ ] 4.7 (Phase 2, hors première version) Swipe right avec `overlap` → snackbar signale le conflit en plus du bouton « Annuler »
 
 ## 5. Coordination avec les autres changes
 
 - [ ] 5.1 events-core : confirmer le retrait du type `social_ride`, remplacé par ce change
 - [ ] 5.2 spot-core : consommer le champ `category` (privé/public) pour l'affichage du rappel d'inscription
 - [ ] 5.3 map-core : ajouter les sessions comme 4e type de marqueur, avec filtre dédié
-- [ ] 5.4 navigation-core : intégrer le fil de sessions dans l'écran "Fil" partagé avec events
+- [ ] 5.4 navigation-core : (Phase 2) intégrer le fil de sessions dans l'écran "Fil" partagé avec events
+- [ ] 5.7 notifications-push : ajouter le type « session modifiée » (changement d'horaire)
 - [ ] 5.5 notifications-push : ajouter le type "session annulée" (voir notifications-push)
 - [ ] 5.6 events-core : la détection de chevauchement croise `session_participants` et `event_inscriptions`, logique partagée entre les deux changes

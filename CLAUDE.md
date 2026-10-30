@@ -4,7 +4,7 @@
 
 MeetNShred est une plateforme communautaire **multi-disciplines de ride**. L'objectif : connecter les riders entre eux, en temps réel, autour des spots et des events.
 
-L'écran central est une **carte Google Maps** qui affiche ce qui se passe autour du rider : spots rideable, events en cours, sessions à venir. Le **swipe sur les events** est la fonctionnalité différenciante — rejoindre une session en un geste, sans friction.
+L'écran central est une **carte Google Maps** qui affiche ce qui se passe autour du rider : spots rideable, events en cours, sessions à venir. **Rejoindre une sortie en un tap depuis la carte** est la fonctionnalité différenciante, sans friction. Le swipe (fil d'events et de sessions) reste prévu, mais en Phase 2.
 
 Les disciplines couvertes (liste ouverte, non exhaustive) : MX, DH, Enduro moto/VTT, Supermoto, Freeride, FMX, Moto piste/circuit, Kite, Wakeboard (boat et cable), Skateboard, Ski/Snow, DirtJump.
 
@@ -51,7 +51,7 @@ Langue de travail du projet : **français**. Specs, commits, discussions — tou
 **Rôles utilisateurs**
 - `rider` — compte standard
 - `spot_manager` (nom TBD) — peut créer et gérer des spots (attribué par super admin)
-- `organisateur` — peut créer des sessions organisées sur les events
+- `organisateur` — peut créer des track days et des compétitions (events)
 - `super_admin` — validation manuelle des spots, attribution des rôles
 
 **Photos**
@@ -90,11 +90,11 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 |---|---|---|
 | `auth-registration` | Specs complètes | Écran d'accueil + message de bienvenue, connexion email/Google/Facebook/TikTok (+ Apple sur iOS), JWT, géolocalisation onboarding (non bloquante, expliquée), RGPD (consentement, âge 16 ans, suppression, export) |
 | `rider-profile` | Specs complètes | Profil, disciplines, fiches matériel JSONB, upload photos |
-| `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement) ou public (gratuit), statuts en config, inscriptions, paiement externe |
-| `events-core` | Specs complètes | Events (spot_opening, track_day, competition, shop_event — tous réservés à un rôle), swipe, feed filtré |
-| `sessions-core` | Specs complètes | Sessions de ride créées librement par un rider, liées à un spot privé ou public, rejoignables par d'autres riders, fil swipable |
-| `navigation-core` | Specs complètes | Barre de navigation (Carte/Fil/Créer/Messages/Profil), fil combiné events+sessions, hub de création par rôle |
-| `map-core` | Specs complètes | Carte Google Maps principale, marqueurs spots/events/sessions/magasins, filtres |
+| `spot-core` | Specs complètes | Entité spot multi-disciplines, privé (établissement, validé) ou public (gratuit, créé sans validation par n'importe quel rider), statuts en config, inscriptions, paiement externe |
+| `events-core` | Specs complètes | Events (event du spot : BBQ, ride day, test vélo…, track_day, competition, shop_event — tous réservés à un rôle), rejoindre depuis la carte, prix facultatif ; swipe et fil en Phase 2 |
+| `sessions-core` | Specs complètes | Sessions de ride créées librement par un rider, liées à un spot privé ou public, rejoignables depuis la carte, ajout de lieu à la volée, modifiables par leur créateur ; fil swipable en Phase 2 |
+| `navigation-core` | Specs complètes | Barre de navigation (Carte/Créer/Messages/Profil), hub de création par rôle ; onglet Fil (events + sessions) en Phase 2 |
+| `map-core` | Specs complètes | Carte Google Maps principale : repères en pin (couleur = catégorie, plein = géré / creux = libre, badge d'état, pièce « $ »), bottom sheet qui permet de rejoindre, tri lisible en zone dense, filtres dont « Gratuit » |
 | `i18n-core` | Specs complètes | FR/EN/ES, préférence utilisateur, middleware langue |
 | `notifications-push` | Specs complètes | FCM + APNs, tokens push, 7 types de notifications (dont rappel 30 min), suivi spot, préférences par type |
 | `backoffice-spot` | Non démarré | Interface gestionnaire de spot |
@@ -108,7 +108,7 @@ Les changes sont dans `openspec/changes/<nom>/`. Chaque change contient :
 ## Phases produit
 
 - **MVP** : Tout ce qui est dans les changes ci-dessus (le fil d'activité, initialement prévu en Phase 2, est avancé au MVP via `rider-social`)
-- **Phase 2** : Calendrier d'ouvertures récurrentes
+- **Phase 2** : Fil swipable d'events et de sessions (onglet « Fil », vue liste), calendrier d'ouvertures récurrentes
 - **Phase 3** : Paiement natif intégré, 2FA, messagerie gestionnaire↔rider
 
 ---

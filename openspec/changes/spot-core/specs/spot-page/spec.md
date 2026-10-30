@@ -18,19 +18,66 @@ Le système SHALL exposer une page publique pour chaque spot contenant : nom, ca
 ---
 
 ### Requirement: Création d'un spot selon sa catégorie
-Le système SHALL exiger le rôle gestionnaire pour soumettre un spot **privé**. Le système SHALL permettre à tout rider connecté de soumettre un spot **public**, sans rôle particulier. Dans les deux cas, le spot SHALL rester non publié tant qu'il n'a pas été validé manuellement par le super admin.
+Le système SHALL exiger le rôle gestionnaire pour soumettre un spot **privé** (géré, payant), qui SHALL rester non publié tant que le super admin ne l'a pas validé. Le système SHALL permettre à tout rider connecté de créer un spot **public** (libre, gratuit), sans rôle particulier et **sans validation** : le spot SHALL être visible sur la carte dès sa création. Un spot public a pour seuls champs obligatoires un nom et une position.
 
 #### Scenario: Soumission d'un spot privé
 - **WHEN** un utilisateur sans rôle gestionnaire tente de soumettre un spot de catégorie privée
 - **THEN** le système retourne une erreur 403
 
-#### Scenario: Soumission d'un spot public par un rider
-- **WHEN** un rider connecté, sans rôle particulier, soumet un spot de catégorie publique (ex : une vague)
-- **THEN** le spot est créé avec un statut "en attente de validation", sans que le rider devienne gestionnaire
+#### Scenario: Validation d'un spot privé
+- **WHEN** le super admin valide un spot privé en attente
+- **THEN** le spot devient visible sur la carte et dans les recherches
 
-#### Scenario: Validation par le super admin
-- **WHEN** le super admin valide un spot en attente (privé ou public)
-- **THEN** le spot devient public, visible sur la carte et dans les recherches
+#### Scenario: Création immédiate d'un spot libre
+- **WHEN** un rider connecté, sans rôle particulier, ajoute un lieu gratuit (ex : une vague) avec un nom et une position
+- **THEN** le spot est créé et visible immédiatement sur la carte, sans que le rider devienne gestionnaire
+
+---
+
+### Requirement: Garde-fous à la création d'un spot libre
+Le système SHALL protéger la carte contre les doublons et les abus sans retarder la création : proposer les spots existants proches avant de créer, limiter le nombre de créations par rider, et permettre le masquage a posteriori.
+
+#### Scenario: Doublon probable
+- **WHEN** un rider saisit un nom ou une position à moins de 200 m d'un spot existant
+- **THEN** le système propose "Il existe déjà un spot à 200 m : [nom], c'est le même ?" avant de créer
+
+#### Scenario: Limite de créations
+- **WHEN** un compte récent dépasse le nombre de créations de spots autorisé sur 24 heures
+- **THEN** le système refuse la création suivante et indique de réessayer plus tard
+
+#### Scenario: Masquage a posteriori
+- **WHEN** un spot libre est signalé et que le super admin le juge inapproprié (voir moderation-core)
+- **THEN** le spot est masqué de la carte sans être supprimé
+
+#### Scenario: Modification d'un spot libre
+- **WHEN** un rider autre que le créateur veut corriger un spot libre
+- **THEN** il le signale (voir moderation-core) ; seuls le créateur et le super admin peuvent le modifier
+
+---
+
+### Requirement: Revendication d'un spot libre par son propriétaire
+Le système SHALL permettre au vrai gestionnaire d'un lieu de revendiquer un spot libre existant. Après vérification par le super admin, le spot SHALL passer en spot géré, avec un gestionnaire, des tarifs et un statut.
+
+#### Scenario: Demande de revendication
+- **WHEN** un utilisateur ayant le rôle gestionnaire demande à revendiquer un spot libre
+- **THEN** la demande passe en file de validation du super admin
+
+#### Scenario: Revendication acceptée
+- **WHEN** le super admin accepte la revendication
+- **THEN** le spot devient un spot géré (pin plein), son nouveau gestionnaire peut renseigner tarifs et statut, et les sessions déjà créées sur ce spot sont conservées
+
+---
+
+### Requirement: Prix ou gratuité affiché
+Le système SHALL afficher sur la bottom sheet et la fiche de tout spot soit "Gratuit", soit le tarif dans la devise du lieu (ex : "dès 15 €"). Un spot géré sans tarif renseigné est affiché "Gratuit".
+
+#### Scenario: Spot payant
+- **WHEN** un rider consulte un spot avec un tarif de 15 €
+- **THEN** la fiche affiche "dès 15 €" et la carte porte la pièce "$" sur son pin (voir map-core)
+
+#### Scenario: Spot géré gratuit
+- **WHEN** un rider consulte un skatepark municipal géré mais sans tarif
+- **THEN** la fiche affiche "Gratuit" et le pin est plein sans pièce
 
 ---
 
