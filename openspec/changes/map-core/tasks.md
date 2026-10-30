@@ -20,7 +20,7 @@
 
 ## 3. Mobile — Marqueurs et interactions
 
-- [ ] 3.0 Composant repère unique : pin en goutte, couleur de catégorie, dessin blanc au centre, badge d'état, pièce « $ », variantes plein/creux et vif/pâle — planche de référence validée le 2026-10-30, pictogrammes provisoires à faire valider par Romu (le poing est une ébauche)
+- [ ] 3.0 Composant repère unique : pin en goutte, couleur de catégorie, dessin blanc au centre, badge d'état, pièce « $ », variantes plein/creux et vif/pâle — planche de référence et pictogrammes (dont le poing) validés le 2026-10-30 ; à redessiner proprement en vectoriel pour la production
 - [ ] 3.0b Ajouter aux tokens du design system : couleurs de catégorie (spot, event, session, magasin) et couleur de la pièce « $ » ; remplace le repère cercle/losange du prototype v3
 - [ ] 3.1 Repère spot : cyan, toujours la planche de skate, plein si géré / creux si libre, badge coche / croix / horloge (couleurs de statut du design system, signe en plus de la couleur)
 - [ ] 3.2 Repère event : vert, poing, vif si en cours / pâle si à venir selon `is_active`

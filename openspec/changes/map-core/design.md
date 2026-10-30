@@ -46,8 +46,8 @@ Les quatre types de marqueurs n'ont pas la même logique de présence sur la car
 **Ce que ça remplace dans le design system**
 → Le prototype v3 (`design/DESIGN-SYSTEM.md`) définit un repère cercle pour les spots, coloré par statut, avec l'icône de la discipline, et un losange rouge pour les events. Les repères ci-dessus le remplacent. Les couleurs de statut du design system restent utilisées pour les badges, et le rouge de marque n'est plus utilisé sur la carte. Deux conséquences : le sport d'un spot n'est plus visible sur son pin (il l'est dans la bottom sheet et par les filtres), et la couleur des pins de catégorie devra être ajoutée aux tokens.
 
-**Pictogrammes provisoires**
-→ Les dessins de la planche de référence sont des ébauches : le poing en particulier est à remplacer par celui dessiné par Romu (V1, `MY EVENTS/poing-titre-noir.png`).
+**Pictogrammes validés**
+→ Le poing de la planche de référence est validé par le propriétaire du produit : on ne le remplace pas par celui dessiné par Romu pour la V1 (`MY EVENTS/poing-titre-noir.png`, resté dans la documentation d'origine). Les autres dessins (planche de skate, deux silhouettes, boutique, verre, couverts) sont validés aussi ; reste à les redessiner proprement en vectoriel pour la production.
 
 **Tri en zone dense, sans boîte noire**
 → Au-delà de 50 repères, on affiche d'abord ce qui est en cours ou le plus proche dans le temps, puis le plus proche en distance, puis ce où vont des riders suivis. Pas de popularité, pour ne pas écraser les petits spots. Le même tri pourra servir de base au fil de la Phase 2.
