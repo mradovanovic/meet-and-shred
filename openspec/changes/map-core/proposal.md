@@ -5,11 +5,13 @@ La carte est l'écran central de MeetNShred. C'est le premier écran que voit un
 ## What Changes
 
 - Carte Google Maps en thème monochrome sombre centrée sur la position du rider
-- Affichage des terrains avec badges de statut colorés (spots privés uniquement)
-- Affichage des events et des sessions limités aux 2 prochaines semaines, avec une couleur différente pour un élément en cours (actif) et un élément pas encore commencé (à venir)
-- Affichage des magasins, toujours visibles (pas de fenêtre de temps), colorés selon leur statut ouvert/fermé (voir shop-core)
-- Filtres par type (Spots, Events, Sessions, Magasins) et par distance
-- Tap sur un marqueur → aperçu rapide → navigation vers la fiche complète
+- Repères en pin (forme V1) : couleur = catégorie (spot cyan, event vert, session violet, magasin bleu foncé), dessin blanc = ce que c'est (planche de skate pour tout spot, poing, silhouettes, boutique), plein = spot géré / creux = spot libre, badge ✓ ✕ horloge pour l'état, pièce « $ » pour le payant — ces repères remplacent le cercle et le losange du prototype v3
+- Events et sessions limités aux 2 prochaines semaines, vifs s'ils sont en cours, plus pâles s'ils sont à venir
+- Magasins toujours visibles (pas de fenêtre de temps), avec un badge ouvert/fermé (voir shop-core)
+- Première version : la carte est le seul écran de découverte ; la bottom sheet porte le bouton « Je viens » / « Rejoindre »
+- Tri lisible en zone dense (en cours ou proche dans le temps, puis distance, puis riders suivis), sans popularité
+- Filtres par type (Spots, Events, Sessions, Magasins), par sport et pastille « Gratuit »
+- Carte vide : invitation à ajouter un lieu et créer la première session
 
 ## Capabilities
 

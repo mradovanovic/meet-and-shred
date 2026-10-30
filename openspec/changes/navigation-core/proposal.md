@@ -4,8 +4,8 @@ Chaque écran de l'app a été spécifié séparément (carte, fil d'events, pro
 
 ## What Changes
 
-- Barre de navigation principale à 5 destinations : Carte, Fil, Créer, Messages, Profil
-- Le "Fil" regroupe events et sessions dans un même écran avec un toggle, plutôt que deux onglets séparés
+- Barre de navigation principale à 4 destinations dans la première version : Carte, Créer, Messages, Profil
+- Phase 2 : un cinquième onglet "Fil", qui regroupe events et sessions dans un même écran avec un toggle
 - Le bouton "Créer" ouvre un menu contextuel dont le contenu dépend du rôle du rider (session pour tout le monde, event/spot/magasin selon rôle)
 - Une section "Gestion", visible uniquement pour les riders ayant un rôle gestionnaire, organisateur ou super admin, regroupée dans le Profil plutôt qu'un onglet dédié
 - Les fiches (spot, magasin, event, session, profil d'un autre rider) restent accessibles par navigation depuis la carte, le fil ou une recherche — jamais dans la barre principale

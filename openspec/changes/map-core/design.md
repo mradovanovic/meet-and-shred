@@ -40,6 +40,21 @@ Les quatre types de marqueurs n'ont pas la même logique de présence sur la car
 **Magasins toujours affichés, colorés par statut**
 → Contrairement aux spots (statut manuel du gestionnaire) et aux events (fenêtre de date), un magasin est présent sur la carte en permanence dès lors qu'il est validé. Seule sa couleur change, calculée à la volée depuis ses horaires d'ouverture et une éventuelle fermeture exceptionnelle (voir shop-core). L'icône du marqueur reflète son type de commerce.
 
+**Repères : une grammaire en trois règles (décision du 2026-10-30)**
+→ La forme de pin (celle de la V1) et sa **couleur** disent la catégorie : spot cyan, event vert, session violet, magasin bleu foncé. Le **dessin blanc** dit ce que c'est : planche de skate pour tout spot, poing pour un event, deux silhouettes pour une session, boutique/verre/couverts pour un magasin. Le **remplissage** dit géré (plein) ou libre (creux). Un **badge** dit ouvert, fermé ou bientôt (signe en plus de la couleur, pour le daltonisme), le **pâle** dit « plus tard », et la **pièce « $ »** dit payant. Le « $ » est volontairement un signe unique pour toutes les devises : le montant réel s'affiche dans la devise du lieu.
+
+**Ce que ça remplace dans le design system**
+→ Le prototype v3 (`design/DESIGN-SYSTEM.md`) définit un repère cercle pour les spots, coloré par statut, avec l'icône de la discipline, et un losange rouge pour les events. Les repères ci-dessus le remplacent. Les couleurs de statut du design system restent utilisées pour les badges, et le rouge de marque n'est plus utilisé sur la carte. Deux conséquences : le sport d'un spot n'est plus visible sur son pin (il l'est dans la bottom sheet et par les filtres), et la couleur des pins de catégorie devra être ajoutée aux tokens.
+
+**Pictogrammes provisoires**
+→ Les dessins de la planche de référence sont des ébauches : le poing en particulier est à remplacer par celui dessiné par Romu (V1, `MY EVENTS/poing-titre-noir.png`).
+
+**Tri en zone dense, sans boîte noire**
+→ Au-delà de 50 repères, on affiche d'abord ce qui est en cours ou le plus proche dans le temps, puis le plus proche en distance, puis ce où vont des riders suivis. Pas de popularité, pour ne pas écraser les petits spots. Le même tri pourra servir de base au fil de la Phase 2.
+
+**Première version : la carte est le seul écran de découverte**
+→ Pas de fil. La carte porte le bouton « Je viens » / « Rejoindre » dans sa bottom sheet (voir events-core, sessions-core). Une carte vide devient un appel à créer : ajouter un lieu et lancer la première session.
+
 ## Risks / Trade-offs
 
 - [Coût Google Maps] Facturation à l'usage → Mettre en place un quota par utilisateur côté serveur, utiliser le SDK mobile (moins cher que l'API web)

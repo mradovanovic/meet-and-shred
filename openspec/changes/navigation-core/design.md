@@ -27,12 +27,15 @@ Le produit a été spécifié écran par écran, capability par capability, sans
 → Au tap, le menu ne propose que ce que le rôle du rider autorise :
 - Tout rider : "Créer une session"
 - Rôle organisateur : + "Créer un event" (track day, compétition)
-- Gestionnaire d'un spot : + "Créer une ouverture" pour ce spot, "Soumettre un nouveau spot"
+- Gestionnaire d'un spot : + "Créer un event du spot" (BBQ, ride day, test vélo, autre) pour ce spot, "Soumettre un spot payant"
 - Gestionnaire d'un magasin : + "Créer un event magasin"
-- Tout rider peut aussi "Soumettre un nouveau spot public" (voir spot-core) — seul le spot privé exige le rôle gestionnaire
+- Tout rider peut aussi "Ajouter un lieu gratuit" (voir spot-core, créé immédiatement) — seul le spot payant géré exige le rôle gestionnaire
 
 **Gestion dans le Profil, pas un onglet dédié**
 → Un onglet "Gestion" serait vide pour la majorité des riders. La section vit dans le Profil, visible seulement si le rider a un rôle gestionnaire, organisateur, ou super admin : liste de ses spots/magasins gérés, accès au back-office de chacun, et pour le super admin, la file de validation des spots/magasins et la file de signalements (voir rider-social).
+
+**Première version : 4 destinations, sans « Fil » (décision du 2026-10-30)**
+→ Carte, Créer, Messages, Profil. Tout ce qui se voit et se rejoint passe par la carte. L'écran « Fil » (events et sessions en cartes swipables, avec toggle) reste spécifié ci-dessus mais arrive en Phase 2. Moins d'écrans à construire et à tester, et une seule façon de rejoindre une sortie à apprendre.
 
 ## Risks / Trade-offs
 

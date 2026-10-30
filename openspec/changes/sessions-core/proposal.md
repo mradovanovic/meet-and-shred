@@ -8,7 +8,9 @@ Beaucoup de sorties sont spontanées et informelles — un rider veut simplement
 - N'importe quel autre rider peut la rejoindre ou la quitter librement — pas de capacité, pas de paiement
 - Une session est distincte de l'inscription formelle d'un spot privé (voir spot-core, spot-inscriptions) : rejoindre une session ne réserve pas de place payante, c'est une coordination sociale
 - Visible sur la carte dans la même fenêtre de 2 semaines que les events, avec la même distinction "en cours" (couleur active) / "à venir" (couleur atténuée)
-- Fil de sessions swipable, sur le même principe que le fil d'events — intégré dans le même écran "Fil" avec un toggle (voir navigation-core)
+- Première version : on rejoint une session depuis la carte (bouton « Rejoindre »). Le fil de sessions swipable, sur le même principe que le fil d'events, est conservé mais déplacé en Phase 2 (voir navigation-core)
+- Lieu manquant : « Ajouter ce lieu » crée un spot libre immédiatement pendant la création de la session
+- Le créateur peut modifier l'heure et la note de sa session
 - Le créateur peut annuler explicitement sa session, avec notification aux participants
 - Avertissement (pas un blocage) si la session chevauche dans le temps un autre event ou une autre session déjà pris par le rider
 - Remplace l'ancien type d'event `social_ride`, retiré d'events-core (voir events-core)
