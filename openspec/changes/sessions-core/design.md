@@ -52,6 +52,15 @@ Une session peut avoir lieu sur un spot privé (ex : un terrain MX un samedi) ou
 **Chevauchement horaire — même traitement que côté events**
 → Cohérent avec events-core : avertissement après swipe (ajouté au snackbar "Annuler" existant) ou confirmation explicite depuis la page de session, jamais un blocage silencieux. La vérification croise `session_participants` et `event_inscriptions` sur les plages horaires — une session utilise `starts_at` à `starts_at + 3h` (voir la décision sur l'absence de champ "heure de fin").
 
+**Première version : tout se rejoint depuis la carte, le fil swipable arrive en Phase 2 (décision du 2026-10-30)**
+→ Le rider rejoint une session par le bouton « Rejoindre » de la bottom sheet. Le fil de sessions swipable et sa vue liste restent spécifiés mais marqués Phase 2.
+
+**Lieu manquant : on l'ajoute sans quitter la création**
+→ Quand le lieu cherché n'existe pas, « Ajouter ce lieu » (nom + position) crée un spot libre tout de suite (voir spot-core, sans validation) et la création de la session continue sur ce lieu. Ça remplace l'ancien parcours « soumets d'abord ton spot et attends sa validation », trop lourd pour un rider qui veut juste dire « j'y vais ».
+
+**Gérer sa session**
+→ Le créateur peut modifier l'heure et la note, et l'annuler. Un changement d'horaire prévient les participants, avec un nouveau type de notification « session modifiée » (voir notifications-push).
+
 ## Risks / Trade-offs
 
 - [Confusion session / inscription payante] Un rider pourrait croire que rejoindre une session sur un spot privé suffit à réserver sa place → message explicite sur l'écran de session

@@ -1,7 +1,8 @@
 ## 1. Base de données et config
 
 - [ ] 1.1 Créer la table `event_types` (id, slug, label JSONB `{fr,en,es}`, icon, required_role, capacity_required) — extensible par super admin
-- [ ] 1.2 Seeder les types de base : spot_opening, track_day, competition, shop_event
+- [ ] 1.2 Seeder les types de base : spot_event (générique), bbq, ride_day, bike_test (créables par le gestionnaire du spot lié), track_day, competition (organisateur), shop_event (gestionnaire du magasin) — remplace l'ancien type spot_opening
+- [ ] 1.2b Ajouter à `events` un prix facultatif (`price_amount`, `price_currency`) et `payment_url` ; sans prix = gratuit
 - [ ] 1.3 Créer la table `events` (id, event_type_id, title, description, spot_id nullable, shop_id nullable, lat, lng, address, starts_at, ends_at, status, max_capacity nullable, organizer_id, created_at) — un event a soit spot_id soit shop_id, jamais les deux
 - [ ] 1.4 Créer la table `event_disciplines` (event_id, discipline_id) — liaison N:N
 - [ ] 1.5 Créer la table `event_inscriptions` (id, event_id, rider_id, created_at) avec contrainte UNIQUE (event_id, rider_id)
@@ -24,7 +25,15 @@
 - [ ] 3.2 `PUT /events/:id` — édition (organisateur uniquement)
 - [ ] 3.3 `PATCH /events/:id/cancel` — annulation + notification push aux inscrits
 
-## 4. Mobile — Swipe feed
+## 3b. Mobile — Rejoindre depuis la carte (première version)
+
+- [ ] 3b.1 Bouton « Je viens » dans la bottom sheet d'un event (voir map-core)
+- [ ] 3b.2 Event gratuit et sans limite : inscription immédiate + snackbar « Annuler » 3 secondes
+- [ ] 3b.3 Event payant ou limité : volet « Payer sur place / Payer en ligne » (ouvre `payment_url` dans le navigateur natif), puis inscription avec le mode choisi
+- [ ] 3b.4 Chevauchement détecté : message « Chevauche [nom] de 14h à 16h » avec « Rejoindre quand même » / « Annuler »
+- [ ] 3b.5 Event complet : bouton désactivé « Complet »
+
+## 4. Mobile — Swipe feed (Phase 2, hors première version)
 
 - [ ] 4.1 Composant carte swipable (solutioning : react-native-deck-swiper ou custom)
 - [ ] 4.2 Swipe right → inscription API + animation verte + snackbar "Annuler" 3 secondes ; si `overlap` retourné, le snackbar affiche en plus le nom et l'horaire de l'engagement en conflit
@@ -43,5 +52,6 @@
 
 - [ ] 6.1 Sélection du type d'event (liste depuis API, filtrée selon rôle du rider — aucun type visible pour un rider sans rôle)
 - [ ] 6.2 Formulaire : titre, description, disciplines, date/heure, capacité (optionnelle)
-- [ ] 6.3 Sélection du spot lié (pour spot_opening, track_day, competition) ou du magasin lié (pour shop_event)
+- [ ] 6.3 Sélection du spot lié (pour spot_event, bbq, ride_day, bike_test, track_day, competition) ou du magasin lié (pour shop_event)
+- [ ] 6.3b Champ prix facultatif (montant, devise) et lien de paiement dans le formulaire de création
 - [ ] 6.5 Bouton annulation de l'event depuis la page de gestion
