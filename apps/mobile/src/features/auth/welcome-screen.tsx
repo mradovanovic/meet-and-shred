@@ -5,6 +5,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/lib/supabase';
 import { Colors, FontFamily, Radius, Spacing } from '@/theme/tokens';
 import { DisciplineMontage } from './discipline-montage';
 import { validateCredentials } from './credentials';
@@ -100,9 +101,46 @@ function EmailForm({ onBack, onAuthenticated }: { onBack: () => void; onAuthenti
   const [consent, setConsent] = useState(false);
   const [age, setAge] = useState(false);
   const [touched, setTouched] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const { emailValid, passwordValid, valid } = validateCredentials(email, password);
-  const canSubmit = valid && consent && age;
+  const canSubmit = valid && consent && age && !loading;
+
+  const submit = async () => {
+    setServerError(null);
+    setInfo(null);
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        // Compte déjà existant → on tente une connexion pour fluidifier les tests.
+        if (/registered|already|exists/i.test(error.message)) {
+          const { data: signIn, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) {
+            setServerError(signInError.message);
+            return;
+          }
+          if (signIn.session) {
+            onAuthenticated();
+            return;
+          }
+        }
+        setServerError(error.message);
+        return;
+      }
+      if (data.session) {
+        onAuthenticated();
+      } else {
+        setInfo('Compte créé. Vérifie ton email pour confirmer, puis reconnecte-toi.');
+      }
+    } catch (e) {
+      setServerError(e instanceof Error ? e.message : 'Erreur réseau, réessaie.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
@@ -137,9 +175,12 @@ function EmailForm({ onBack, onAuthenticated }: { onBack: () => void; onAuthenti
       />
       <Checkbox checked={age} onToggle={() => setAge((v) => !v)} label="J'ai 16 ans ou plus" />
 
+      {serverError ? <Text style={styles.errorText}>{serverError}</Text> : null}
+      {info ? <Text style={styles.infoText}>{info}</Text> : null}
+
       <View style={styles.actions}>
-        <Button variant="primary" disabled={!canSubmit} onPress={onAuthenticated}>
-          C&apos;est parti
+        <Button variant="primary" disabled={!canSubmit} onPress={submit}>
+          {loading ? 'Un instant…' : "C'est parti"}
         </Button>
         <Button variant="ghost" onPress={onBack}>
           Retour
@@ -256,7 +297,8 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
   },
   inputError: { borderColor: Colors.danger },
-  errorText: { color: Colors.danger, fontSize: 12, fontFamily: FontFamily.regular },
+  errorText: { color: Colors.danger, fontSize: 13, fontFamily: FontFamily.regular, textAlign: 'center' },
+  infoText: { color: Colors.lagoon, fontSize: 13, fontFamily: FontFamily.regular, textAlign: 'center', lineHeight: 18 },
 
   checkRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md },
   checkBox: {
