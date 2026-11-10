@@ -18,8 +18,7 @@ const BENEFITS: { icon: IconName; text: string }[] = [
 
 export default function LocationScreen() {
   const router = useRouter();
-  // map-core pas encore construit : on revient à l'accueil pour la démo.
-  const finish = () => router.replace('/');
+  const finish = () => router.replace('/map');
 
   return (
     <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
