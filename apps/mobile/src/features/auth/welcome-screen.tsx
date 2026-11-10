@@ -53,6 +53,18 @@ export default function WelcomeScreen() {
 }
 
 function Intro({ onEmail, onAuthenticated }: { onEmail: () => void; onAuthenticated: () => void }) {
+  const [guestLoading, setGuestLoading] = useState(false);
+  const [guestError, setGuestError] = useState<string | null>(null);
+
+  const continueAsGuest = async () => {
+    setGuestError(null);
+    setGuestLoading(true);
+    const { error } = await supabase.auth.signInAnonymously();
+    setGuestLoading(false);
+    if (error) setGuestError('Mode invité indisponible (à activer dans Supabase).');
+    else onAuthenticated();
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.body}>
       <View style={styles.gestures}>
@@ -88,6 +100,11 @@ function Intro({ onEmail, onAuthenticated }: { onEmail: () => void; onAuthentica
         >
           Avec mon email
         </Button>
+
+        <Button variant="ghost" onPress={continueAsGuest} disabled={guestLoading}>
+          {guestLoading ? 'Un instant…' : 'Continuer en invité'}
+        </Button>
+        {guestError ? <Text style={styles.errorText}>{guestError}</Text> : null}
 
         <LegalLine />
       </View>
