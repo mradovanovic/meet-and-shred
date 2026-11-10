@@ -1,6 +1,5 @@
-import { ScreenPlaceholder } from '@/components/ui/screen-placeholder';
+import ProfileScreen from '@/features/profile/profile-screen';
 
-// Placeholder temporaire — remplacé par le vrai écran Profil (sélecteur de disciplines).
 export default function ProfileTab() {
-  return <ScreenPlaceholder icon="user" title="Profil" subtitle="Bientôt" />;
+  return <ProfileScreen />;
 }
