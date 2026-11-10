@@ -31,3 +31,28 @@ begin
     end if;
   end loop;
 end $$;
+
+-- Sessions de démo (sorties à venir) pour tester « Rejoindre » depuis la carte.
+do $$
+declare
+  demo jsonb := '[
+    {"spot":"Skatepark Lyon Gerland","in_days":1,"hour":18,"note":"Session skate after-work, qui vient ?"},
+    {"spot":"Fontainebleau — Enduro VTT","in_days":2,"hour":10,"note":"Sortie enduro tranquille le matin"}
+  ]'::jsonb;
+  r jsonb;
+  sid uuid;
+  when_ts timestamptz;
+begin
+  for r in select * from jsonb_array_elements(demo) loop
+    select id into sid from public.spots where name = r->>'spot' limit 1;
+    if sid is not null then
+      when_ts := date_trunc('day', now())
+               + ((r->>'in_days')::int) * interval '1 day'
+               + ((r->>'hour')::int) * interval '1 hour';
+      if not exists (select 1 from public.sessions where spot_id = sid and note = r->>'note') then
+        insert into public.sessions (spot_id, creator_id, starts_at, note, status)
+        values (sid, null, when_ts, r->>'note', 'active');
+      end if;
+    end if;
+  end loop;
+end $$;

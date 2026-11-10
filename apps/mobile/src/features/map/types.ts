@@ -13,4 +13,5 @@ export type MapViewProps = {
   spots: NearbySpot[];
   center: { lat: number; lng: number };
   zoom?: number;
+  onSelectSpot?: (spotId: string) => void;
 };

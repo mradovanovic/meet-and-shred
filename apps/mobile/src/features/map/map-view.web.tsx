@@ -8,7 +8,7 @@ import type { MapViewProps } from './types';
 mapboxgl.accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
 
 // Carte web (Mapbox GL JS). La version native vit dans map-view.tsx.
-export function MapView({ spots, center, zoom = 5 }: MapViewProps) {
+export function MapView({ spots, center, zoom = 5, onSelectSpot }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -42,10 +42,11 @@ export function MapView({ spots, center, zoom = 5 }: MapViewProps) {
       el.style.cssText = `width:18px;height:18px;border-radius:50%;border:2px solid ${color};background:${
         s.category === 'public' ? 'transparent' : color
       };box-shadow:0 0 0 2px rgba(0,0,0,.45);cursor:pointer`;
-      const marker = new mapboxgl.Marker({ element: el })
-        .setLngLat([s.lng, s.lat])
-        .setPopup(new mapboxgl.Popup({ offset: 14, closeButton: false }).setText(s.name))
-        .addTo(map);
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        onSelectSpot?.(s.id);
+      });
+      const marker = new mapboxgl.Marker({ element: el }).setLngLat([s.lng, s.lat]).addTo(map);
       markersRef.current.push(marker);
     }
   }, [spots]);

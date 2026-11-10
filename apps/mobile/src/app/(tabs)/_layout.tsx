@@ -1,11 +1,26 @@
 import { FontAwesome6 } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { type Session } from '@supabase/supabase-js';
+import { Redirect, Tabs } from 'expo-router';
+import { useEffect, useState } from 'react';
 
+import { supabase } from '@/lib/supabase';
 import { Colors, FontFamily } from '@/theme/tokens';
 
 // Structure de navigation principale (v1) : Carte / Créer / Messages / Profil.
 // L'onglet « Fil » (swipe events + sessions) est prévu en Phase 2.
+// Garde d'auth : sans session, on renvoie vers l'accueil.
 export default function TabsLayout() {
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  if (session === undefined) return null; // chargement
+  if (session === null) return <Redirect href="/" />;
+
   return (
     <Tabs
       screenOptions={{
