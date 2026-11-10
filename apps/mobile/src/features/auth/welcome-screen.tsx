@@ -113,7 +113,11 @@ function EmailForm({ onBack, onAuthenticated }: { onBack: () => void; onAuthenti
     setInfo(null);
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { terms_accepted: 'true', terms_version: '1', age_confirmed: 'true' } },
+      });
       if (error) {
         // Compte déjà existant → on tente une connexion pour fluidifier les tests.
         if (/registered|already|exists/i.test(error.message)) {
